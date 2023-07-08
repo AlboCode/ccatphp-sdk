@@ -1,2 +1,19 @@
 {
+    "name": "albocode/ccatphp-sdk",
+    "description": "Cheshire Cat PHP Sdk",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "textalk/websocket": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Albocode\\CcatphpSdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Riccardo Albero"
+        }
+    ]
 }
