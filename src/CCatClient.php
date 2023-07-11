@@ -8,10 +8,8 @@ use Albocode\CcatphpSdk\Model\Response;
 use Albocode\CcatphpSdk\Model\Why;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\UploadedFile;
 use GuzzleHttp\Psr7\Utils;
 use Phrity\Net\Uri;
-use Psr\Http\Message\UploadedFileInterface;
 use WebSocket\Client as WSClient;
 
 class CCatClient
@@ -40,6 +38,10 @@ class CCatClient
         ]);
     }
 
+    /**
+     * @param Message $message
+     * @return Response
+     */
     public function sendMessage(Message $message): Response
     {
 
@@ -56,6 +58,12 @@ class CCatClient
         return $this->jsonToResponse($message);
     }
 
+    /**
+     * @param string $filePath
+     * @param int|null $chunkSize
+     * @param int|null $chunkOverlap
+     * @return PromiseInterface
+     */
     public function rabbitHole(string $filePath, ?int $chunkSize, ?int $chunkOverlap): PromiseInterface
     {
         $promise = $this->httpClient->postAsync('rabbithole/', [
@@ -71,6 +79,12 @@ class CCatClient
         return $promise;
     }
 
+    /**
+     * @param string $webUrl
+     * @param int|null $chunkSize
+     * @param int|null $chunkOverlap
+     * @return PromiseInterface
+     */
     public function rabbitHoleWeb(string $webUrl, ?int $chunkSize, ?int $chunkOverlap): PromiseInterface
     {
         $promise = $this->httpClient->postAsync('rabbithole/web', [
