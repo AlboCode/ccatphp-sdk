@@ -2,40 +2,25 @@
 
 namespace Albocode\CcatphpSdk;
 
+use Albocode\CcatphpSdk\Clients\HttpClient;
+use Albocode\CcatphpSdk\Clients\WSClient;
 use Albocode\CcatphpSdk\Model\Memory;
 use Albocode\CcatphpSdk\Model\Message;
 use Albocode\CcatphpSdk\Model\Response;
 use Albocode\CcatphpSdk\Model\Why;
-use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
-use Phrity\Net\Uri;
-use WebSocket\Client as WSClient;
+
 
 class CCatClient
 {
-    private WSClient $wsClient;
-    private Client $httpClient;
+    protected WSClient $wsClient;
+    protected HttpClient $httpClient;
 
-    public function __construct(string $host, ?int $port = null, string $apikey = '')
+    public function __construct(WSClient $wsClient, HttpClient $httpClient)
     {
-        //todo add support to wss and https
-        $wsUri = (new Uri())
-            ->withScheme('ws')
-            ->withHost($host)
-            ->withPath('ws')
-            ->withPort($port)
-        ;
-
-        $this->wsClient = new WSClient($wsUri, ['filter' => ['text']]);
-
-        $httpUri = (new Uri())
-            ->withHost($host)
-            ->withScheme('http');
-
-        $this->httpClient = new Client([
-            'base_uri' => $httpUri
-        ]);
+        $this->wsClient = $wsClient;
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -45,11 +30,11 @@ class CCatClient
     public function sendMessage(Message $message): Response
     {
 
-        $this->wsClient->text(json_encode($message));
+        $this->wsClient->getWsClient()->text(json_encode($message));
 
         while (true) {
             try {
-                $message = $this->wsClient->receive();
+                $message = $this->wsClient->getWsClient()->receive();
                 break;
             } catch (\WebSocket\ConnectionException $e) {
                 // Possibly log errors
@@ -66,7 +51,7 @@ class CCatClient
      */
     public function rabbitHole(string $filePath, ?int $chunkSize, ?int $chunkOverlap): PromiseInterface
     {
-        $promise = $this->httpClient->postAsync('rabbithole/', [
+        $promise = $this->httpClient->getHttpClient()->postAsync('rabbithole/', [
             'multipart' => [
                 [
                     'name'     => 'file',
@@ -87,7 +72,7 @@ class CCatClient
      */
     public function rabbitHoleWeb(string $webUrl, ?int $chunkSize, ?int $chunkOverlap): PromiseInterface
     {
-        $promise = $this->httpClient->postAsync('rabbithole/web', [
+        $promise = $this->httpClient->getHttpClient()->postAsync('rabbithole/web', [
             'body' => [
                 'url' => $webUrl
             ]
