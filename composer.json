@@ -9,11 +9,17 @@
     "autoload": {
         "psr-4": {
             "Albocode\\CcatphpSdk\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/"
+        ]
     },
     "authors": [
         {
             "name": "Riccardo Albero"
         }
-    ]
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^10"
+    }
 }
