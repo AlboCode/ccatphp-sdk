@@ -4,8 +4,9 @@ use Albocode\CcatphpSdk\Clients\HttpClient;
 use Albocode\CcatphpSdk\Clients\WSClient;
 use Albocode\CcatphpSdk\Model\Message;
 use Albocode\CcatphpSdk\Model\Response;
+use PHPUnit\Framework\TestCase;
 
-class CCatClientTest extends \PHPUnit\Framework\TestCase
+class CCatClientTest extends TestCase
 {
     public function testSendMessage()
     {

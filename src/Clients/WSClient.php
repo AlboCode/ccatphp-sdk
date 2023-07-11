@@ -3,11 +3,12 @@
 namespace Albocode\CcatphpSdk\Clients;
 
 use Phrity\Net\Uri;
+use WebSocket\Client;
 
 class WSClient
 {
 
-    private \WebSocket\Client $wsClient;
+    private Client $wsClient;
 
     public function __construct(string $host, ?int $port = null, string $apikey = '')
     {
@@ -18,13 +19,13 @@ class WSClient
             ->withPath('ws')
             ->withPort($port)
         ;
-        $this->wsClient = new \WebSocket\Client($wsUri, ['filter' => ['text']]);
+        $this->wsClient = new Client($wsUri, ['filter' => ['text']]);
     }
 
     /**
-     * @return \WebSocket\Client
+     * @return Client
      */
-    public function getWsClient(): \WebSocket\Client
+    public function getWsClient(): Client
     {
         return $this->wsClient;
     }
