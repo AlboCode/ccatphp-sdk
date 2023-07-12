@@ -73,12 +73,31 @@ class CCatClient
     public function rabbitHoleWeb(string $webUrl, ?int $chunkSize, ?int $chunkOverlap): PromiseInterface
     {
         $promise = $this->httpClient->getHttpClient()->postAsync('rabbithole/web', [
-            'body' => [
+            'json' => [
                 'url' => $webUrl
             ]
         ]);
 
         return $promise;
+    }
+
+
+    public function getMemoryCollection()
+    {
+        $response = $this->httpClient->getHttpClient()->get('/memory/collections/');
+
+        return $response->getBody()->getContents();
+    }
+
+    public function getMemoryRecall(string $text, ?int $k = null, ?string $user_id = null)
+    {
+        $response = $this->httpClient->getHttpClient()->get('/memory/recall/', [
+            'query' => [
+                'text' => $text
+            ]
+        ]);
+
+        return $response->getBody()->getContents();
     }
 
 
