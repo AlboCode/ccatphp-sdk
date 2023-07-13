@@ -110,7 +110,7 @@ class CCatClient
         $response->error = $responseArray['error'];
         $why = new Why();
         $why->input = $responseArray['why']['input'];
-        $why->intermediate_steps = $responseArray['why']['intermediate_steps'];
+//        $why->intermediate_steps = $responseArray['why']['intermediate_steps'];
         $memory = new Memory();
         $memory->declarative = $responseArray['why']['memory']['declarative'];
         $memory->episodic = $responseArray['why']['memory']['episodic'];
