@@ -4,10 +4,10 @@ namespace Albocode\CcatphpSdk\Model;
 
 class Memory
 {
-    public array $episodic;
+    public array $episodic [];
 
-    public array $declarative;
+    public array $declarative = [];
 
-    public array $procedural;
+    public array $procedural = [];
 
 }

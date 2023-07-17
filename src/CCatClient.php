@@ -114,7 +114,7 @@ class CCatClient
         $memory = new Memory();
         $memory->declarative = $responseArray['why']['memory']['declarative'];
         $memory->episodic = $responseArray['why']['memory']['episodic'];
-        $memory->procedural = $responseArray['why']['memory']['procedural'];
+//        $memory->procedural = $responseArray['why']['memory']['procedural'];
         $why->memory = $memory;
         $response->why = $why;
         return $response;
