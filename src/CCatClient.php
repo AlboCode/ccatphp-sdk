@@ -35,6 +35,9 @@ class CCatClient
         while (true) {
             try {
                 $message = $this->wsClient->getWsClient()->receive();
+                if (str_contains($message, "\"type\": \"notification\"")) {
+                    continue;
+                }
                 break;
             } catch (\WebSocket\ConnectionException $e) {
                 // Possibly log errors
