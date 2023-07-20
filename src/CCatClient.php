@@ -26,6 +26,7 @@ class CCatClient
     /**
      * @param Message $message
      * @return Response
+     * @throws \Exception
      */
     public function sendMessage(Message $message): Response
     {
@@ -35,7 +36,7 @@ class CCatClient
         while (true) {
             try {
                 $message = $this->wsClient->getWsClient()->receive();
-                if (str_contains($message, "\"type\": \"notification\"")) {
+                if (str_contains($message, "\"type\": \"notification\"") || empty($message)) {
                     continue;
                 }
                 break;
