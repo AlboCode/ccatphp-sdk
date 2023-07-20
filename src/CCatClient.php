@@ -36,8 +36,11 @@ class CCatClient
         while (true) {
             try {
                 $message = $this->wsClient->getWsClient()->receive();
-                if (str_contains($message, "\"type\": \"notification\"") || empty($message)) {
+                if (str_contains($message, "\"type\": \"notification\"")) {
                     continue;
+                }
+                if (empty($message)) {
+                    throw new \Exception("Emptiy message from AI");
                 }
                 break;
             } catch (\WebSocket\ConnectionException $e) {
