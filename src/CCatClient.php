@@ -42,7 +42,9 @@ class CCatClient
                 if (empty($message)) {
                     throw new \Exception("Emptiy message from AI");
                 }
-                break;
+                if (str_contains($message, "\"type\": \"chat\"")) {
+                    break;
+                }
             } catch (\WebSocket\ConnectionException $e) {
                 // Possibly log errors
             }
