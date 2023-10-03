@@ -7,9 +7,9 @@ class Why
     public string $input;
 
     /**
-     * @var array
+     * @var null|array
      */
-    public array $intermediate_steps;
+    public ?array $intermediate_steps;
 
     public Memory $memory;
 }

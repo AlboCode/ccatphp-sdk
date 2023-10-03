@@ -108,20 +108,24 @@ class CCatClient
     }
 
 
+    /**
+     * @throws \Exception
+     */
     private function  jsonToResponse(string $jsonResponse): Response
     {
         $response = new Response();
         $responseArray = json_decode($jsonResponse, true);
+        if ($responseArray['type'] === 'error') {
+            throw new \Exception($responseArray['description']);
+        }
         $response->content = $responseArray['content'];
         $response->type = $responseArray['type'];
-        $response->error = $responseArray['error'];
         $why = new Why();
         $why->input = $responseArray['why']['input'];
-//        $why->intermediate_steps = $responseArray['why']['intermediate_steps'];
+        $why->intermediate_steps = $responseArray['why']['intermediate_steps'];
         $memory = new Memory();
         $memory->declarative = $responseArray['why']['memory']['declarative'];
         $memory->episodic = $responseArray['why']['memory']['episodic'];
-//        $memory->procedural = $responseArray['why']['memory']['procedural'];
         $why->memory = $memory;
         $response->why = $why;
         return $response;
