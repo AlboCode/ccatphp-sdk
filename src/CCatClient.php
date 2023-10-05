@@ -10,6 +10,7 @@ use Albocode\CcatphpSdk\Model\Response;
 use Albocode\CcatphpSdk\Model\Why;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\ResponseInterface;
 
 
 class CCatClient
@@ -88,15 +89,21 @@ class CCatClient
         return $promise;
     }
 
+    public function deleteDeclarativeMemoryByMetadata(array $metadata): ResponseInterface
+    {
+        return $this->httpClient->getHttpClient()->delete('memory/collections/declarative/points', [
+            "json" => $metadata
+        ]);
+    }
 
-    public function getMemoryCollection()
+    public function getMemoryCollection(): string
     {
         $response = $this->httpClient->getHttpClient()->get('/memory/collections/');
 
         return $response->getBody()->getContents();
     }
 
-    public function getMemoryRecall(string $text, ?int $k = null, ?string $user_id = null)
+    public function getMemoryRecall(string $text, ?int $k = null, ?string $user_id = null): string
     {
         $response = $this->httpClient->getHttpClient()->get('/memory/recall/', [
             'query' => [
