@@ -44,7 +44,7 @@ class CCatClient
                 }
                 if (str_contains($message, "\"type\":\"chat_token\"") && $closure) {
 
-//                    $closure?->call($this, $message);
+                    $closure?->call($this, $message);
                     continue;
                 }
                 if (empty($message)) {
