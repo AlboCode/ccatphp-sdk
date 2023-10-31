@@ -10,6 +10,7 @@ use Albocode\CcatphpSdk\Model\Response;
 use Albocode\CcatphpSdk\Model\Why;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
+use PhpParser\Node\Expr\Closure;
 use Psr\Http\Message\ResponseInterface;
 
 
@@ -24,20 +25,26 @@ class CCatClient
         $this->httpClient = $httpClient;
     }
 
+
     /**
      * @param Message $message
      * @return Response
      * @throws \Exception
      */
-    public function sendMessage(Message $message): Response
+    public function sendMessage(Message $message, ?\Closure $closure = null): Response
     {
 
-        $this->wsClient->getWsClient($message->user_id)->text(json_encode($message));
+        $this->wsClient->getWsClient()->text(json_encode($message));
 
         while (true) {
             try {
                 $message = $this->wsClient->getWsClient()->receive();
                 if (str_contains($message, "\"type\": \"notification\"")) {
+                    continue;
+                }
+                if (str_contains($message, "\"type\": \"chat_token\"") && $closure) {
+
+                    $closure?->call($message);
                     continue;
                 }
                 if (empty($message)) {
@@ -50,7 +57,6 @@ class CCatClient
         }
         return $this->jsonToResponse($message);
     }
-
     /**
      * @param string $filePath
      * @param int|null $chunkSize
