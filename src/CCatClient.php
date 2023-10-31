@@ -33,18 +33,18 @@ class CCatClient
      */
     public function sendMessage(Message $message, ?\Closure $closure = null): Response
     {
-
-        $this->wsClient->getWsClient($message->user_id)->text(json_encode($message));
+        $client = $this->wsClient->getWsClient($message->user_id);
+        $client->text(json_encode($message));
 
         while (true) {
             try {
-                $message = $this->wsClient->getWsClient()->receive();
+                $message = $client->receive();
                 if (str_contains($message, "\"type\":\"notification\"")) {
                     continue;
                 }
                 if (str_contains($message, "\"type\":\"chat_token\"") && $closure) {
 
-                    $closure?->call($this, $message);
+//                    $closure?->call($this, $message);
                     continue;
                 }
                 if (empty($message)) {
