@@ -34,17 +34,17 @@ class CCatClient
     public function sendMessage(Message $message, ?\Closure $closure = null): Response
     {
 
-        $this->wsClient->getWsClient()->text(json_encode($message));
+        $this->wsClient->getWsClient($message->user_id)->text(json_encode($message));
 
         while (true) {
             try {
                 $message = $this->wsClient->getWsClient()->receive();
-                if (str_contains($message, "\"type\": \"notification\"")) {
+                if (str_contains($message, "\"type\":\"notification\"")) {
                     continue;
                 }
-                if (str_contains($message, "\"type\": \"chat_token\"") && $closure) {
+                if (str_contains($message, "\"type\":\"chat_token\"") && $closure) {
 
-                    $closure?->call($message);
+                    $closure?->call($this, $message);
                     continue;
                 }
                 if (empty($message)) {
@@ -55,8 +55,10 @@ class CCatClient
                 // Possibly log errors
             }
         }
+
         return $this->jsonToResponse($message);
     }
+
     /**
      * @param string $filePath
      * @param int|null $chunkSize
