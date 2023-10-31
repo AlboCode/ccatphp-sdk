@@ -32,7 +32,7 @@ class CCatClient
     public function sendMessage(Message $message): Response
     {
 
-        $this->wsClient->getWsClient()->text(json_encode($message));
+        $this->wsClient->getWsClient($message->user_id)->text(json_encode($message));
 
         while (true) {
             try {
@@ -129,7 +129,7 @@ class CCatClient
         $response->type = $responseArray['type'];
         $why = new Why();
         $why->input = $responseArray['why']['input'];
-        $why->intermediate_steps = $responseArray['why']['intermediate_steps'];
+        $why->intermediate_steps = $responseArray['why']['intermediate_steps'] ?? [];
         $memory = new Memory();
         $memory->declarative = $responseArray['why']['memory']['declarative'];
         $memory->episodic = $responseArray['why']['memory']['episodic'];
