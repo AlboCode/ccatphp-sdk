@@ -42,7 +42,7 @@ class CCatClient
                 if (str_contains($message, "\"type\":\"notification\"")) {
                     continue;
                 }
-                if (str_contains($message, "\"type\":\"chat_token\"") && $closure) {
+                if (str_contains($message, "\"type\":\"chat_token\"")) {
 
                     $closure?->call($this, $message);
                     continue;
