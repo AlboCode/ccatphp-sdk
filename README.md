@@ -59,8 +59,6 @@ $promise->wait();
 Memory management utilities:
 
 ```php
-//file
-
 $this->client->getMemoryCollection(); // get number of vectors in the working memory
 $this->client->getMemoryRecall("HELLO"); // recall memories by text
 
