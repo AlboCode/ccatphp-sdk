@@ -10,8 +10,8 @@ use Albocode\CcatphpSdk\Model\Response;
 use Albocode\CcatphpSdk\Model\Why;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
-use PhpParser\Node\Expr\Closure;
 use Psr\Http\Message\ResponseInterface;
+use WebSocket\ConnectionException;
 
 
 class CCatClient
@@ -39,11 +39,7 @@ class CCatClient
         while (true) {
             try {
                 $message = $client->receive();
-                if (str_contains($message, "\"type\":\"notification\"")) {
-                    continue;
-                }
-                if (str_contains($message, "\"type\":\"chat_token\"")) {
-
+                if (str_contains($message, "\"type\":\"notification\"") || str_contains($message, "\"type\":\"chat_token\"")) {
                     $closure?->call($this, $message);
                     continue;
                 }
@@ -51,7 +47,7 @@ class CCatClient
                     throw new \Exception("Emptiy message from AI");
                 }
                 break;
-            } catch (\WebSocket\ConnectionException $e) {
+            } catch (ConnectionException $e) {
                 // Possibly log errors
             }
         }

@@ -11,14 +11,16 @@ class WSClient
     private string $host;
     private ?int $port;
     private string $apikey;
+    private bool $isWSS;
 
-    public function __construct(string $host, ?int $port = null, string $apikey = '')
+    public function __construct(string $host, ?int $port = null, string $apikey = '', bool $isWSS = false)
     {
         //todo add support to wss
 
         $this->host = $host;
         $this->port = $port;
         $this->apikey = $apikey;
+        $this->isWSS = $isWSS;
     }
 
     /**
@@ -27,7 +29,7 @@ class WSClient
     public function getWsClient(string $userid = 'user'): Client
     {
         $wsUri = (new Uri())
-            ->withScheme('ws')
+            ->withScheme($this->isWSS ? 'wss' : 'ws')
             ->withHost($this->host)
             ->withPath(sprintf('ws/%s', $userid))
             ->withPort($this->port)
