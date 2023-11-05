@@ -3,24 +3,34 @@
 namespace Albocode\CcatphpSdk\Clients;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use Phrity\Net\Uri;
+use Psr\Http\Message\RequestInterface;
 
 class HttpClient
 {
 
     private Client $httpClient;
+    private string $apikey;
 
-    public function __construct(string $host, ?int $port = null, string $apikey = '')
+    public function __construct(string $host, ?int $port = null, string $apikey = '', bool $isHTTPs = false)
     {
-//todo add support to https
+        $handlerStack = HandlerStack::create();
+        $handlerStack->push(Middleware::tap($this->beforeSecureRequest()));
+
         $httpUri = (new Uri())
             ->withHost($host)
             ->withPort($port)
-            ->withScheme('http');
+            ->withScheme($isHTTPs ? 'https' : 'http');
 
         $this->httpClient = new Client([
-            'base_uri' => $httpUri
+            'base_uri' => $httpUri,
+            'handler' => $handlerStack
         ]);
+
+        $this->apikey = $apikey;
     }
 
     /**
@@ -31,5 +41,14 @@ class HttpClient
         return $this->httpClient;
     }
 
+    protected function beforeSecureRequest(): \Closure
+    {
+        return function (RequestInterface &$request, array $requestOptions) {
+            if (!empty($this->apikey)) {
+                $request = $request->withHeader('access_token', $this->apikey);
+            }
+            $request = $request->withHeader('Content-Type', 'application/json');
+        };
+    }
 
 }
