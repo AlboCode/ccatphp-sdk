@@ -67,8 +67,7 @@ class CCatClient
             'multipart' => [
                 [
                     'name'     => 'file',
-                    'contents' => Utils::tryFopen($filePath, 'r'),
-                    'filename' => 'custom_filename.txt'
+                    'contents' => Utils::tryFopen($filePath, 'r')
                 ],
             ]
         ]);

@@ -6,13 +6,8 @@ use Albocode\CcatphpSdk\Clients\HttpClient;
 use Albocode\CcatphpSdk\Clients\WSClient;
 
 
-$cCatClient = new CCatClient(new WSClient('cheshire_cat_core'), new HttpClient('cheshire_cat_core'));
+$cCatClient = new CCatClient(new WSClient('cheshire_cat_core'), new HttpClient('cheshire_cat_core', null, 'meow'));
 
-$response = $cCatClient->deleteDeclarativeMemoryByMetadata(["source" => "FastAPI - Swagger UI.pdf"]);
-//try {
-//    $response = $cCatClient->sendMessage(new Message('Hello message', 'user', []));
-//} catch (Exception $e) {
-//    var_dump($e->getMessage());
-//}
+$response = $cCatClient->getMemoryCollection();
 
 var_dump($response);
