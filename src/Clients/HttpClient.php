@@ -47,7 +47,6 @@ class HttpClient
             if (!empty($this->apikey)) {
                 $request = $request->withHeader('access_token', $this->apikey);
             }
-            $request = $request->withHeader('Content-Type', 'application/json');
         };
     }
 
