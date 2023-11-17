@@ -34,7 +34,7 @@ class WSClient
             ->withPath(sprintf('ws/%s', $userid))
             ->withPort($this->port)
         ;
-        return new Client($wsUri, ['filter' => ['text']]);
+        return new Client($wsUri);
 
     }
 

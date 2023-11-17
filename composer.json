@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "guzzlehttp/guzzle": "^7.0",
-        "textalk/websocket": "^1.6"
+        "phrity/websocket": "^2.0"
     },
     "autoload": {
         "psr-4": {

@@ -29,7 +29,6 @@ class CCatClient
     /**
      * @param Message $message
      * @return Response
-     * @throws \Exception
      */
     public function sendMessage(Message $message, ?\Closure $closure = null): Response
     {
@@ -37,19 +36,19 @@ class CCatClient
         $client->text(json_encode($message));
 
         while (true) {
-            try {
-                $message = $client->receive();
-                if (str_contains($message, "\"type\":\"notification\"") || str_contains($message, "\"type\":\"chat_token\"")) {
-                    $closure?->call($this, $message);
-                    continue;
-                }
-                if (empty($message)) {
-                    throw new \Exception("Emptiy message from AI");
-                }
-                break;
-            } catch (ConnectionException $e) {
-                // Possibly log errors
+
+            $response = $client->receive();
+            $message = $response->getContent();
+            if (str_contains($message, "\"type\":\"notification\"") || str_contains($message, "\"type\":\"chat_token\"")) {
+                $closure?->call($this, $message);
+                continue;
             }
+            if (str_contains($message, "\"type\":\"chat\"")) {
+                break;
+            }
+
+
+
         }
 
         return $this->jsonToResponse($message);
