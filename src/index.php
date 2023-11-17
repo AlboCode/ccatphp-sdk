@@ -9,5 +9,5 @@ use Albocode\CcatphpSdk\Clients\WSClient;
 $cCatClient = new CCatClient(new WSClient('cheshire_cat_core'), new HttpClient('cheshire_cat_core', null, 'meow'));
 
 $response = $cCatClient->getMemoryCollection();
-$response = $cCatClient->sendMessage(new \Albocode\CcatphpSdk\Model\Message("Ciao come stai?"));
+$response = $cCatClient->sendMessage(new \Albocode\CcatphpSdk\Model\Message("Ciao come stai?"), fn($message) => var_dump($message));
 var_dump($response);
