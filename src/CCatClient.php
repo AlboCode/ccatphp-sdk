@@ -39,17 +39,15 @@ class CCatClient
 
             $response = $client->receive();
             $message = $response->getContent();
-            if (str_contains($message, "\"type\":\"notification\"") || str_contains($message, "\"type\":\"chat_token\"")) {
+            if (!str_contains($message, "\"type\":\"chat\"")) {
                 $closure?->call($this, $message);
                 continue;
             }
-            if (str_contains($message, "\"type\":\"chat\"")) {
-                break;
-            }
-
-
+            break;
 
         }
+
+        $client->disconnect();
 
         return $this->jsonToResponse($message);
     }

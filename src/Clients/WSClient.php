@@ -4,6 +4,8 @@ namespace Albocode\CcatphpSdk\Clients;
 
 use Phrity\Net\Uri;
 use WebSocket\Client;
+use WebSocket\Middleware\CloseHandler;
+use WebSocket\Middleware\PingResponder;
 
 class WSClient
 {
@@ -34,8 +36,14 @@ class WSClient
             ->withPath(sprintf('ws/%s', $userid))
             ->withPort($this->port)
         ;
-        return new Client($wsUri);
-
+        $client = new Client($wsUri);
+        $client->setPersistent(true)
+            ->setTimeout(100000)
+            // Add CloseHandler middleware
+            ->addMiddleware(new CloseHandler())
+            // Add PingResponder middleware
+            ->addMiddleware(new PingResponder());
+        return $client;
     }
 
 
