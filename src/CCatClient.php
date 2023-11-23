@@ -58,13 +58,14 @@ class CCatClient
      * @param int|null $chunkOverlap
      * @return PromiseInterface
      */
-    public function rabbitHole(string $filePath, ?int $chunkSize, ?int $chunkOverlap): PromiseInterface
+    public function rabbitHole(string $filePath, ?string $fileName, ?int $chunkSize, ?int $chunkOverlap): PromiseInterface
     {
         $promise = $this->httpClient->getHttpClient()->postAsync('rabbithole/', [
             'multipart' => [
                 [
                     'name'     => 'file',
-                    'contents' => Utils::tryFopen($filePath, 'r')
+                    'contents' => Utils::tryFopen($filePath, 'r'),
+                    'filename' => $fileName ?? null
                 ],
             ]
         ]);
