@@ -1,5 +1,5 @@
 <?php
-
+//
 //
 //require dirname(__DIR__).'/vendor/autoload.php';
 //
@@ -10,7 +10,12 @@
 //$cCatClient = new CCatClient(new WSClient('cheshire_cat_core'), new HttpClient('cheshire_cat_core', null, 'meow'));
 //
 //try {
-//    //    $response = $cCatClient->putPluginSettings("cat_advanced_tools", [
+//        $response = $cCatClient->putLLMSettings("LLMOpenAIChatConfig", [
+//            "open_api_key" => "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",
+//            "temperature" => 0.7,
+//            "model_name" => "gpt-3.5-turbo",
+//            "streaming" => true,
+//        ]);
 //    //
 //    //        "prompt_prefix" => "You are a supportive AI that help during hard time" ,
 //    //        "episodic_memory_k" => 3,
@@ -25,7 +30,7 @@
 //    //    ]);
 //    //    $response = $cCatClient->deleteConversationHistory();
 //    echo "<pre>";
-//    //    var_dump($response);
+//        var_dump($response);
 //    echo "</pre>";
 //
 //} catch (Exception $exception) {

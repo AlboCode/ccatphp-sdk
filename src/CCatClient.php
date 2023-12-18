@@ -4,6 +4,7 @@ namespace Albocode\CcatphpSdk;
 
 use Albocode\CcatphpSdk\Clients\HttpClient;
 use Albocode\CcatphpSdk\Clients\WSClient;
+use Albocode\CcatphpSdk\Model\Api\LLMSetting\LLMSettingsOutput;
 use Albocode\CcatphpSdk\Model\Api\Plugin\PluginCollectionOutput;
 use Albocode\CcatphpSdk\Model\Api\Plugin\Settings\PluginSettingsOutput;
 use Albocode\CcatphpSdk\Model\Api\RabbitHole\AllowedMimeTypesOutput;
@@ -255,6 +256,24 @@ class CCatClient
         $response = $this->httpClient->getHttpClient()->get(sprintf('/plugins/settings/%s', $pluginId), []);
         return $this->serializer->deserialize($response->getBody()->getContents(), PluginSettingsOutput::class, 'json', []);
 
+    }
+
+    public function getLLMSettings(string $llm): LLMSettingsOutput
+    {
+        $response = $this->httpClient->getHttpClient()->get(sprintf('/llm/settings/%s', $llm), []);
+        return $this->serializer->deserialize($response->getBody()->getContents(), LLMSettingsOutput::class, 'json', []);
+    }
+
+    /**
+     * @param string $llm
+     * @param array<string, mixed> $values
+     * @return LLMSettingsOutput
+     */
+    public function putLLMSettings(string $llm, array $values): LLMSettingsOutput {
+        $response = $this->httpClient->getHttpClient()->put(sprintf('/llm/settings/%s', $llm), [
+            'json' => $values
+        ]);
+        return $this->serializer->deserialize($response->getBody()->getContents(), LLMSettingsOutput::class, 'json', []);
     }
 
     /**
