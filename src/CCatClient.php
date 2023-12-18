@@ -4,6 +4,8 @@ namespace Albocode\CcatphpSdk;
 
 use Albocode\CcatphpSdk\Clients\HttpClient;
 use Albocode\CcatphpSdk\Clients\WSClient;
+use Albocode\CcatphpSdk\Model\Api\Settings\SettingOutputItem;
+use Albocode\CcatphpSdk\Model\Api\Settings\SettingsOutputCollection;
 use Albocode\CcatphpSdk\Model\Memory;
 use Albocode\CcatphpSdk\Model\Message;
 use Albocode\CcatphpSdk\Model\Response;
@@ -11,29 +13,57 @@ use Albocode\CcatphpSdk\Model\Why;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
-use WebSocket\ConnectionException;
-
+use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class CCatClient
 {
     protected WSClient $wsClient;
     protected HttpClient $httpClient;
 
+    private Serializer $serializer;
+
     public function __construct(WSClient $wsClient, HttpClient $httpClient)
     {
         $this->wsClient = $wsClient;
         $this->httpClient = $httpClient;
+        $phpDocExtractor = new PhpDocExtractor();
+        $typeExtractor   = new PropertyInfoExtractor(
+            typeExtractors: [ new ConstructorExtractor([$phpDocExtractor]), $phpDocExtractor,]
+        );
+        $normalizer = new ObjectNormalizer(
+            null,
+            new CamelCaseToSnakeCaseNameConverter(),
+            null,
+            propertyTypeExtractor: $typeExtractor
+        );
+
+        $encoder = new JsonEncoder();
+
+        $this->serializer = new Serializer([$normalizer, new ArrayDenormalizer()], [$encoder]);
     }
 
 
     /**
      * @param Message $message
      * @return Response
+     * @throws \Exception
      */
     public function sendMessage(Message $message, ?\Closure $closure = null): Response
     {
         $client = $this->wsClient->getWsClient($message->user_id);
-        $client->text(json_encode($message));
+        $json = json_encode($message);
+        if (!$json) {
+            throw new \Exception("Error encode message");
+        }
+        $client->text($json);
 
         while (true) {
 
@@ -90,6 +120,11 @@ class CCatClient
         return $promise;
     }
 
+    /**
+     * @param array<string, mixed> $metadata
+     * @return ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function deleteDeclarativeMemoryByMetadata(array $metadata): ResponseInterface
     {
         return $this->httpClient->getHttpClient()->delete('memory/collections/declarative/points', [
@@ -116,10 +151,26 @@ class CCatClient
     }
 
 
+    public function getSettings(): SettingsOutputCollection
+    {
+        $response = $this->httpClient->getHttpClient()->get('/settings');
+
+        return $this->serializer->deserialize($response->getBody()->getContents(), SettingsOutputCollection::class, 'json', []);
+    }
+
+    public function getSetting(string $settingId): SettingOutputItem
+    {
+        $response = $this->httpClient->getHttpClient()->get(sprintf('/settings/%s', $settingId));
+
+        return $this->serializer->deserialize($response->getBody()->getContents(), SettingOutputItem::class, 'json', []);
+    }
+
+
+
     /**
      * @throws \Exception
      */
-    private function  jsonToResponse(string $jsonResponse): Response
+    private function jsonToResponse(string $jsonResponse): Response
     {
         $response = new Response();
         $responseArray = json_decode($jsonResponse, true);

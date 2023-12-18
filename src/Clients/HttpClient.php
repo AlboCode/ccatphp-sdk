@@ -11,7 +11,6 @@ use Psr\Http\Message\RequestInterface;
 
 class HttpClient
 {
-
     private Client $httpClient;
     private string $apikey;
 

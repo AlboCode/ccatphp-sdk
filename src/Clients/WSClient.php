@@ -9,19 +9,15 @@ use WebSocket\Middleware\PingResponder;
 
 class WSClient
 {
-
     private string $host;
     private ?int $port;
-    private string $apikey;
     private bool $isWSS;
 
-    public function __construct(string $host, ?int $port = null, string $apikey = '', bool $isWSS = false)
+    public function __construct(string $host, ?int $port = null, bool $isWSS = false)
     {
-        //todo add support to wss
 
         $this->host = $host;
         $this->port = $port;
-        $this->apikey = $apikey;
         $this->isWSS = $isWSS;
     }
 

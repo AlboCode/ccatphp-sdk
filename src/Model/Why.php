@@ -7,7 +7,7 @@ class Why
     public string $input;
 
     /**
-     * @var null|array
+     * @var null|array<string, mixed>
      */
     public ?array $intermediate_steps;
 

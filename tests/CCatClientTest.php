@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class CCatClientTest extends TestCase
 {
-    public function testSendMessage()
+    public function testSendMessage(): void
     {
 
         $cCatClient = new \Albocode\CcatphpSdk\CCatClient($this->getWSClientMock(), $this->getHttpClientMock());
@@ -16,7 +16,7 @@ class CCatClientTest extends TestCase
         $this->assertTrue($result instanceof Response, 'Always true');
     }
 
-    private function getWSClientMock()
+    private function getWSClientMock(): WSClient
     {
         $catResponse = file_get_contents('tests/cat_response.json');
         $wsClMock = $this->createMock(\WebSocket\Client::class);
@@ -26,7 +26,7 @@ class CCatClientTest extends TestCase
         return $wsClientMock;
     }
 
-    private function getHttpClientMock()
+    private function getHttpClientMock(): HttpClient
     {
         return $this->createMock(HttpClient::class);
     }

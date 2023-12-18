@@ -4,7 +4,6 @@ namespace Albocode\CcatphpSdk\Model;
 
 class Response
 {
-
     public string $type;
 
     public string $content;
