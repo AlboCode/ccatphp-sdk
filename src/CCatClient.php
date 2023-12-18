@@ -165,6 +165,25 @@ class CCatClient
         return $this->serializer->deserialize($response->getBody()->getContents(), SettingOutputItem::class, 'json', []);
     }
 
+    /**
+     * @param string $settingId
+     * @param array<string, mixed> $values
+     * @return SettingOutputItem
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function putSetting(string $settingId, array $values): SettingOutputItem
+    {
+        $response = $this->httpClient->getHttpClient()->put(sprintf('/settings/%s', $settingId), [
+            'json' => $values
+        ]);
+
+        return $this->serializer->deserialize($response->getBody()->getContents(), SettingOutputItem::class, 'json', []);
+    }
+
+
+    public function deleteSetting(string $settingId): ResponseInterface {
+        return $this->httpClient->getHttpClient()->delete(sprintf('/settings/%s', $settingId));
+    }
 
 
     /**

@@ -10,4 +10,7 @@ $cCatClient = new CCatClient(new WSClient('cheshire_cat_core'), new HttpClient('
 
 $response = $cCatClient->getSettings();
 //$response = $cCatClient->sendMessage(new \Albocode\CcatphpSdk\Model\Message("Ciao come stai?"), fn($message) => var_dump($message));
+
+echo "<pre>";
 var_dump($response->settings);
+echo "</pre>";
