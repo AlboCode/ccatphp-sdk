@@ -4,8 +4,11 @@ namespace Albocode\CcatphpSdk;
 
 use Albocode\CcatphpSdk\Clients\HttpClient;
 use Albocode\CcatphpSdk\Clients\WSClient;
-use Albocode\CcatphpSdk\Model\Api\Settings\SettingOutputItem;
-use Albocode\CcatphpSdk\Model\Api\Settings\SettingsOutputCollection;
+use Albocode\CcatphpSdk\Model\Api\Plugin\PluginCollectionOutput;
+use Albocode\CcatphpSdk\Model\Api\Plugin\Settings\PluginSettingsOutput;
+use Albocode\CcatphpSdk\Model\Api\RabbitHole\AllowedMimeTypesOutput;
+use Albocode\CcatphpSdk\Model\Api\Setting\SettingOutputItem;
+use Albocode\CcatphpSdk\Model\Api\Setting\SettingsOutputCollection;
 use Albocode\CcatphpSdk\Model\Memory;
 use Albocode\CcatphpSdk\Model\Message;
 use Albocode\CcatphpSdk\Model\Response;
@@ -15,7 +18,6 @@ use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
-use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
@@ -120,6 +122,14 @@ class CCatClient
         return $promise;
     }
 
+
+    public function getAllowedMimeTypes(): AllowedMimeTypesOutput
+    {
+        $response = $this->httpClient->getHttpClient()->get(sprintf('/rabbithole/allowed-mimetypes'));
+
+        return $this->serializer->deserialize($response->getBody()->getContents(), AllowedMimeTypesOutput::class, 'json', []);
+    }
+    // -- Memory API
     /**
      * @param array<string, mixed> $metadata
      * @return ResponseInterface
@@ -150,7 +160,16 @@ class CCatClient
         return $response->getBody()->getContents();
     }
 
-
+    /**
+     * @return ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function deleteConversationHistory(): ResponseInterface
+    {
+        return $this->httpClient->getHttpClient()->delete("/memory/conversation_history");
+    }
+    // Memory API --
+    // -- Settings API
     public function getSettings(): SettingsOutputCollection
     {
         $response = $this->httpClient->getHttpClient()->get('/settings');
@@ -185,8 +204,68 @@ class CCatClient
     {
         return $this->httpClient->getHttpClient()->delete(sprintf('/settings/%s', $settingId));
     }
+    // END Settings --
 
+    // Plugins API --
+    public function getPlugins(?string $query = null): PluginCollectionOutput
+    {
+        $response = $this->httpClient->getHttpClient()->get('/plugins', [
+            'query' => ['query' => $query]
+        ]);
 
+        return $this->serializer->deserialize($response->getBody()->getContents(), PluginCollectionOutput::class, 'json', []);
+    }
+
+    /**
+     * @param string $pluginId
+     * @return array<mixed>
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function togglePlugin(string $pluginId): array
+    {
+        $response = $this->httpClient->getHttpClient()->put(sprintf('/plugins/toggle/%s', $pluginId), [
+        ]);
+
+        return $this->serializer->decode($response->getBody()->getContents(), 'json', []);
+    }
+
+    /**
+     * @param string $url
+     * @return array<mixed>
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function installPluginFromRegistry(string $url): array
+    {
+        $response = $this->httpClient->getHttpClient()->post(sprintf('/plugins/upload/registry'), [
+            'json' => [
+                'url' => $url
+            ]
+        ]);
+
+        return $this->serializer->decode($response->getBody()->getContents(), 'json', []);
+
+    }
+
+    public function getPluginSettings(string $pluginId): PluginSettingsOutput
+    {
+        $response = $this->httpClient->getHttpClient()->get(sprintf('/plugins/settings/%s', $pluginId), []);
+        return $this->serializer->deserialize($response->getBody()->getContents(), PluginSettingsOutput::class, 'json', []);
+
+    }
+
+    /**
+     * @param string $pluginId
+     * @param array<string, mixed> $values
+     * @return PluginSettingsOutput
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function putPluginSettings(string $pluginId, array $values): PluginSettingsOutput
+    {
+        $response = $this->httpClient->getHttpClient()->put(sprintf('/plugins/settings/%s', $pluginId), [
+            "json" => $values
+        ]);
+        return $this->serializer->deserialize($response->getBody()->getContents(), PluginSettingsOutput::class, 'json', []);
+    }
     /**
      * @throws \Exception
      */

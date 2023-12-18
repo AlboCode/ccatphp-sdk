@@ -1,6 +1,6 @@
 <?php
 
-namespace Albocode\CcatphpSdk\Model\Api\Settings;
+namespace Albocode\CcatphpSdk\Model\Api\Setting;
 
 class SettingOutput
 {
