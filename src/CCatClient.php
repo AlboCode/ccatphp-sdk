@@ -269,7 +269,8 @@ class CCatClient
      * @param array<string, mixed> $values
      * @return LLMSettingsOutput
      */
-    public function putLLMSettings(string $llm, array $values): LLMSettingsOutput {
+    public function putLLMSettings(string $llm, array $values): LLMSettingsOutput
+    {
         $response = $this->httpClient->getHttpClient()->put(sprintf('/llm/settings/%s', $llm), [
             'json' => $values
         ]);
