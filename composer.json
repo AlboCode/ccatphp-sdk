@@ -5,8 +5,8 @@
     "require": {
         "guzzlehttp/guzzle": "^7.0",
         "phrity/websocket": "^2.0",
-        "symfony/serializer": "^7.0",
-        "symfony/property-access": "^7.0",
+        "symfony/serializer": "^6.3",
+        "symfony/property-access": "^6.3",
         "phpdocumentor/reflection-docblock": "^5.3"
     },
     "autoload": {
