@@ -181,7 +181,8 @@ class CCatClient
     }
 
 
-    public function deleteSetting(string $settingId): ResponseInterface {
+    public function deleteSetting(string $settingId): ResponseInterface
+    {
         return $this->httpClient->getHttpClient()->delete(sprintf('/settings/%s', $settingId));
     }
 
