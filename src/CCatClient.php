@@ -164,9 +164,13 @@ class CCatClient
      * @return ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function deleteConversationHistory(): ResponseInterface
+    public function deleteConversationHistory(string $userId = "user"): ResponseInterface
     {
-        return $this->httpClient->getHttpClient()->delete("/memory/conversation_history");
+        return $this->httpClient->getHttpClient()->delete("/memory/conversation_history", [
+            "headers" => [
+                "user_id" => $userId
+            ]
+        ]);
     }
     // Memory API --
     // -- Settings API
