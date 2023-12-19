@@ -278,6 +278,29 @@ class CCatClient
     }
 
     /**
+     * @param string $embedder
+     * @param array<string, mixed> $values
+     * @return LLMSettingsOutput
+     */
+    public function putEmbedderSettings(string $embedder, array $values): LLMSettingsOutput
+    {
+        $response = $this->httpClient->getHttpClient()->put(sprintf('/embedder/settings/%s', $embedder), [
+            'json' => $values
+        ]);
+        return $this->serializer->deserialize($response->getBody()->getContents(), LLMSettingsOutput::class, 'json', []);
+    }
+
+    /**
+     * @param string $embedder
+     * @return LLMSettingsOutput
+     */
+    public function getEmbedderSettings(string $embedder): LLMSettingsOutput
+    {
+        $response = $this->httpClient->getHttpClient()->get(sprintf('/embedder/settings/%s', $embedder));
+        return $this->serializer->deserialize($response->getBody()->getContents(), LLMSettingsOutput::class, 'json', []);
+    }
+
+    /**
      * @param string $pluginId
      * @param array<string, mixed> $values
      * @return PluginSettingsOutput
