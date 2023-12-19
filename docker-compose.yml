@@ -8,7 +8,7 @@ services:
         - UID=${UID}
         - GID=${GID}
     ports:
-      - "8081:8081"
+      - "8082:8081"
     volumes:
       - ./:/var/www/ccat-php
     networks:

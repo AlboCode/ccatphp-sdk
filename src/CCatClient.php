@@ -132,6 +132,15 @@ class CCatClient
     }
     // -- Memory API
     /**
+     * @return ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function deleteDeclarativeMemory(): ResponseInterface
+    {
+        return $this->httpClient->getHttpClient()->delete('memory/collections/declarative');
+    }
+
+    /**
      * @param array<string, mixed> $metadata
      * @return ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
