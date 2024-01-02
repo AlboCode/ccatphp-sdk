@@ -267,6 +267,11 @@ class CCatClient
 
     }
 
+    public function deletePlugin(string $pluginId): ResponseInterface
+    {
+        return $this->httpClient->getHttpClient()->delete(sprintf('/plugins/%s', $pluginId));
+    }
+
     public function getLLMSettings(string $llm): LLMSettingsOutput
     {
         $response = $this->httpClient->getHttpClient()->get(sprintf('/llm/settings/%s', $llm), []);
