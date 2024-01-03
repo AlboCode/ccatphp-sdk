@@ -4,7 +4,7 @@ namespace Albocode\CcatphpSdk\Model;
 
 class Why
 {
-    public string $input;
+    public ?string $input;
 
     /**
      * @var null|array<string, mixed>
