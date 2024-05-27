@@ -259,6 +259,27 @@ class CCatClient
         return $this->serializer->decode($response->getBody()->getContents(), 'json', []);
 
     }
+    
+    /**
+     * @param string $pathZip
+     * @return array<mixed>
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function installPluginFromZip(string $pathZip): array
+    {
+        $response = $this->httpClient->getHttpClient()->post(sprintf('/plugins/upload'), [
+            'multipart' => [
+                [
+                    'name'     => 'file',
+                    'contents' => Utils::tryFopen($pathZip, 'r'),
+                    'filename' => $fileName ?? null
+                ],
+            ]
+        ]);
+
+        return $this->serializer->decode($response->getBody()->getContents(), 'json', []);
+
+    }
 
     public function getPluginSettings(string $pluginId): PluginSettingsOutput
     {
