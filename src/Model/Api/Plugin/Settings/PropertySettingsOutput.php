@@ -4,7 +4,7 @@ namespace Albocode\CcatphpSdk\Model\Api\Plugin\Settings;
 
 class PropertySettingsOutput
 {
-    public string $default;
+    public mixed $default = null;
 
     /**
      * @var array<string, mixed>|null
