@@ -11,25 +11,51 @@ class WSClient
 {
     private string $host;
     private ?int $port;
+    private ?string $apikey;
+    private ?string $token;
     private bool $isWSS;
 
-    public function __construct(string $host, ?int $port = null, bool $isWSS = false)
-    {
+    public function __construct(
+        string $host,
+        ?int $port = null,
+        ?string $apikey = null,
+        ?bool $isWSS = null,
+    ) {
 
         $this->host = $host;
         $this->port = $port;
-        $this->isWSS = $isWSS;
+        $this->apikey = $apikey;
+        $this->token = null;
+        $this->isWSS = $isWSS ?? false;
     }
 
-    /**
-     * @return Client
-     */
-    public function getWsClient(string $userid = 'user'): Client
+    public function setToken(string $token): self
     {
+        $this->token = $token;
+        return $this;
+    }
+
+    public function getClient(?string $agentId = null, ?string $userId = null): Client
+    {
+        if (!$this->apikey && !$this->token) {
+            throw new \InvalidArgumentException('You must provide an apikey or a token');
+        }
+
+        return $this->createWsClient($agentId, $userId);
+    }
+
+    protected function createWsClient(?string $agentId = null, ?string $userId = null): Client
+    {
+        $userId = $userId ?? 'user';
+        $agentId = $agentId ?? 'agent';
+
+        $path = sprintf('ws/%s/%s', $userId, $agentId);
+        $path .= $this->apikey ? '?apikey=' . $this->apikey : '?token=' . $this->token;
+
         $wsUri = (new Uri())
             ->withScheme($this->isWSS ? 'wss' : 'ws')
             ->withHost($this->host)
-            ->withPath(sprintf('ws/%s', $userid))
+            ->withPath($path)
             ->withPort($this->port)
         ;
         $client = new Client($wsUri);
@@ -41,6 +67,4 @@ class WSClient
             ->addMiddleware(new PingResponder());
         return $client;
     }
-
-
 }
