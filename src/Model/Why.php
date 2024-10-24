@@ -12,4 +12,8 @@ class Why
     public ?array $intermediate_steps;
 
     public Memory $memory;
+    /**
+     * @var null|array<mixed>
+     */
+    public ?array $model_interactions = null;
 }

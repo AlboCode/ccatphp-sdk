@@ -370,6 +370,7 @@ class CCatClient
         $why = new Why();
         $why->input = $responseArray['why']['input'];
         $why->intermediate_steps = $responseArray['why']['intermediate_steps'] ?? [];
+        $why->model_interactions = $responseArray['why']['model_interactions'] ?? [];
         $memory = new Memory();
         $memory->declarative = $responseArray['why']['memory']['declarative'];
         $memory->episodic = $responseArray['why']['memory']['episodic'];
