@@ -4,7 +4,6 @@ namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\TokenOutput;
 use Albocode\CcatphpSdk\DTO\Api\User\UserOutput;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
 class UsersEndpoint extends AbstractEndpoint
@@ -16,9 +15,7 @@ class UsersEndpoint extends AbstractEndpoint
      */
     public function token(string $username, string $password): TokenOutput
     {
-        $httpClient = new Client([
-            'base_uri' => $this->client->getHttpClient()->getHttpUri()
-        ]);
+        $httpClient = $this->client->getHttpClient()->createHttpClient();
 
         $response = $httpClient->post('/auth/token', [
             'json' => [

@@ -3,11 +3,15 @@
 namespace Albocode\CcatphpSdk\Tests;
 
 use Albocode\CcatphpSdk\CcatUtility;
+use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
 
-class SettingsEndpointTest extends BaseTest
+class SettingsEndpointTest extends TestCase
 {
+    use TestTrait;
+
     /**
      * @throws GuzzleException|Exception|\JsonException
      */

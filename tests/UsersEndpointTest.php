@@ -2,10 +2,45 @@
 
 namespace Albocode\CcatphpSdk\Tests;
 
+use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
 
-class UsersEndpointTest extends BaseTest
+class UsersEndpointTest extends TestCase
 {
+    use TestTrait;
+
+    /**
+     * @throws Exception|\JsonException|GuzzleException
+     */
+    public function testTokenSuccess(): void
+    {
+        $expected = [
+            'access_token' => 'token',
+            'token_type' => 'bearer',
+        ];
+
+        $cCatClient = $this->getCCatClient(null, $expected);
+        try {
+            $cCatClient->getHttpClient()->getClient();
+        } catch (\Exception $e) {
+            self::assertInstanceOf(\InvalidArgumentException::class, $e);
+            self::assertEquals('You must provide an apikey or a token', $e->getMessage());
+        }
+
+        $endpoint = $cCatClient->users();
+        $result = $endpoint->token('test-user', 'test-pass');
+
+        self::assertEquals($expected['access_token'], $result->accessToken);
+        self::assertEquals($expected['token_type'], $result->tokenType);
+
+        $httpClient = $cCatClient->getHttpClient()->getClient();
+
+        self::assertInstanceOf(Client::class, $httpClient);
+    }
+
     /**
      * @throws \JsonException|GuzzleException
      */

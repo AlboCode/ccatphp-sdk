@@ -5,7 +5,6 @@ namespace Albocode\CcatphpSdk\Endpoints;
 use Albocode\CcatphpSdk\DTO\Api\Admins\ResetOutput;
 use Albocode\CcatphpSdk\DTO\Api\TokenOutput;
 use Albocode\CcatphpSdk\DTO\Api\Admins\AdminOutput;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
 class AdminsEndpoint extends AbstractEndpoint
@@ -17,9 +16,7 @@ class AdminsEndpoint extends AbstractEndpoint
      */
     public function token(string $username, string $password): TokenOutput
     {
-        $httpClient = new Client([
-            'base_uri' => $this->client->getHttpClient()->getHttpUri()
-        ]);
+        $httpClient = $this->client->getHttpClient()->createHttpClient();
 
         $response = $httpClient->post($this->formatUrl('/auth/token'), [
             'json' => [
@@ -45,8 +42,7 @@ class AdminsEndpoint extends AbstractEndpoint
         string $username,
         string $password,
         ?array $permissions = null,
-        ?string $agentId = null,
-        ?string $requestUserId = null
+        ?string $adminId = null
     ): AdminOutput {
         $payload = [
             'username' => $username,
@@ -60,8 +56,8 @@ class AdminsEndpoint extends AbstractEndpoint
             $this->prefix,
             AdminOutput::class,
             $payload,
-            $agentId,
-            $requestUserId,
+            $this->systemId,
+            $adminId,
         );
     }
 
@@ -69,12 +65,8 @@ class AdminsEndpoint extends AbstractEndpoint
      * @return AdminOutput[]
      * @throws GuzzleException|\JsonException
      */
-    public function getAdmins(
-        ?int $limit = null,
-        ?int $skip = null,
-        ?string $agentId = null,
-        ?string $requestUserId = null
-    ): array {
+    public function getAdmins(?int $limit = null, ?int $skip = null, ?string $adminId = null): array
+    {
         $query = [];
         if ($limit) {
             $query['limit'] = $limit;
@@ -83,7 +75,7 @@ class AdminsEndpoint extends AbstractEndpoint
             $query['skip'] = $skip;
         }
 
-        $response = $this->getHttpClient($agentId, $requestUserId)->get(
+        $response = $this->getHttpClient($this->systemId, $adminId)->get(
             $this->prefix,
             $query ? ['query' => $query] : []
         );
@@ -101,13 +93,13 @@ class AdminsEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function getAdmin(string $userId, ?string $agentId = null, ?string $requestUserId = null): AdminOutput
+    public function getAdmin(string $adminId, ?string $loggedAdminId = null): AdminOutput
     {
         return $this->get(
-            $this->formatUrl($userId),
+            $this->formatUrl($adminId),
             AdminOutput::class,
-            $agentId,
-            $requestUserId
+            $this->systemId,
+            $loggedAdminId
         );
     }
 
@@ -121,8 +113,7 @@ class AdminsEndpoint extends AbstractEndpoint
         ?string $username = null,
         ?string $password = null,
         ?array $permissions = null,
-        ?string $agentId = null,
-        ?string $requestUserId = null,
+        ?string $adminId = null,
     ): AdminOutput {
         $payload = [];
         if ($username !== null) {
@@ -139,49 +130,49 @@ class AdminsEndpoint extends AbstractEndpoint
             $this->formatUrl($userId),
             AdminOutput::class,
             $payload,
-            $agentId,
-            $requestUserId,
+            $this->systemId,
+            $adminId,
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function deleteAdmin(string $userId, ?string $agentId = null, ?string $requestUserId = null): AdminOutput
+    public function deleteAdmin(string $adminId, ?string $loggedUserId = null): AdminOutput
     {
         return $this->delete(
-            $this->formatUrl($userId),
+            $this->formatUrl($adminId),
             AdminOutput::class,
-            $agentId,
-            $requestUserId
+            $this->systemId,
+            $loggedUserId
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function factoryReset(?string $agentId = null, ?string $requestUserId = null): ResetOutput
+    public function factoryReset(?string $adminId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/factory_reset/'),
             ResetOutput::class,
             [],
-            $agentId,
-            $requestUserId
+            $this->systemId,
+            $adminId
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function agentReset(?string $agentId = null, ?string $requestUserId = null): ResetOutput
+    public function agentReset(?string $adminId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/agent_reset/'),
             ResetOutput::class,
             [],
-            $agentId,
-            $requestUserId
+            $this->systemId,
+            $adminId
         );
     }
 }

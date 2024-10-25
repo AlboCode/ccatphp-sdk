@@ -4,10 +4,14 @@ namespace Albocode\CcatphpSdk\Tests;
 
 use Albocode\CcatphpSdk\DTO\Message;
 use Albocode\CcatphpSdk\DTO\Response;
+use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
+use PHPUnit\Framework\TestCase;
 
-class WebsocketEndpointTest extends BaseTest
+class WebsocketEndpointTest extends TestCase
 {
+    use TestTrait;
+
     /**
      * @throws \JsonException|GuzzleException
      */

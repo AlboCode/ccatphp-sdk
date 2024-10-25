@@ -38,12 +38,16 @@ class HttpClient
         $this->token = null;
     }
 
-    protected function createHttpClient(HandlerStack $handlerStack): Client
+    public function createHttpClient(?HandlerStack $handlerStack = null): Client
     {
-        return new Client([
+        $config = [
             'base_uri' => $this->httpUri,
-            'handler' => $handlerStack
-        ]);
+        ];
+        if ($handlerStack) {
+            $config['handler'] = $handlerStack;
+        }
+
+        return new Client($config);
     }
 
     public function setToken(string $token): self

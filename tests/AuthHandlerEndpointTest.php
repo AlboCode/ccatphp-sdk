@@ -2,10 +2,14 @@
 
 namespace Albocode\CcatphpSdk\Tests;
 
+use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
+use PHPUnit\Framework\TestCase;
 
-class AuthHandlerEndpointTest extends BaseTest
+class AuthHandlerEndpointTest extends TestCase
 {
+    use TestTrait;
+
     /**
      * @throws GuzzleException|\JsonException
      */
