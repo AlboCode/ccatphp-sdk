@@ -24,26 +24,26 @@ class MemoryEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function getMemoryCollection(?string $agentId = null, ?string $userId = null): CollectionsOutput
+    public function getMemoryCollection(?string $agentId = null, ?string $loggedUserId = null): CollectionsOutput
     {
         return $this->get(
             $this->formatUrl('/collections'),
             CollectionsOutput::class,
             $agentId,
-            $userId
+            $loggedUserId
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function deleteMemoryCollections(?string $agentId = null, ?string $userId = null): CollectionsWipeOutput
+    public function deleteMemoryCollections(?string $agentId = null, ?string $loggedUserId = null): CollectionsWipeOutput
     {
         return $this->delete(
             $this->formatUrl('/collections'),
             CollectionsWipeOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -53,13 +53,13 @@ class MemoryEndpoint extends AbstractEndpoint
     public function deleteMemoryCollection(
         Collection $collection,
         ?string $agentId = null,
-        ?string $userId = null
+        ?string $loggedUserId = null
     ): CollectionsWipeOutput {
         return $this->delete(
             $this->formatUrl('/collections/' . $collection->value),
             CollectionsWipeOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -70,13 +70,13 @@ class MemoryEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function getConversationHistory(?string $agentId = null, ?string $userId = null): ConversationHistoryOutput
+    public function getConversationHistory(?string $agentId = null, ?string $loggedUserId = null): ConversationHistoryOutput
     {
         return $this->get(
             $this->formatUrl('/conversation_history'),
             ConversationHistoryOutput::class,
             $agentId,
-            $userId
+            $loggedUserId
         );
     }
 
@@ -85,13 +85,13 @@ class MemoryEndpoint extends AbstractEndpoint
      */
     public function deleteConversationHistory(
         ?string $agentId = null,
-        ?string $userId = null
+        ?string $loggedUserId = null
     ): ConversationHistoryDeleteOutput {
         return $this->delete(
             $this->formatUrl('/conversation_history'),
             ConversationHistoryDeleteOutput::class,
             $agentId,
-            $userId
+            $loggedUserId
         );
     }
 
@@ -105,7 +105,7 @@ class MemoryEndpoint extends AbstractEndpoint
         string $text,
         ?int $k = null,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): MemoryRecallOutput {
         $query = ['text' => $text];
         if ($k) {
@@ -116,7 +116,7 @@ class MemoryEndpoint extends AbstractEndpoint
             $this->formatUrl('/recall'),
             MemoryRecallOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
             $query,
         );
     }
@@ -128,14 +128,14 @@ class MemoryEndpoint extends AbstractEndpoint
         Collection $collection,
         MemoryPoint $memoryPoint,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): MemoryPointOutput {
         return $this->postJson(
             $this->formatUrl('/collections/' . $collection->value . '/points'),
             MemoryPointOutput::class,
             $memoryPoint->toArray(),
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -147,13 +147,13 @@ class MemoryEndpoint extends AbstractEndpoint
         Collection $collection,
         string $pointId,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): MemoryPointDeleteOutput {
         return $this->delete(
             $this->formatUrl('/collections/' . $collection->value . '/points/'. $pointId),
             MemoryPointDeleteOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -166,13 +166,13 @@ class MemoryEndpoint extends AbstractEndpoint
         Collection $collection,
         ?array $metadata = null,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): MemoryPointsDeleteByMetadataOutput {
         return $this->delete(
             $this->formatUrl('/collections/' . $collection->value . '/points'),
             MemoryPointsDeleteByMetadataOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
             $metadata ?? null,
         );
     }
@@ -185,7 +185,7 @@ class MemoryEndpoint extends AbstractEndpoint
         ?int $limit = null,
         ?int $offset = null,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): MemoryPointsOutput {
         $query = [];
         if ($limit !== null) {
@@ -199,7 +199,7 @@ class MemoryEndpoint extends AbstractEndpoint
             $this->formatUrl('/collections/' . $collection->value . '/points'),
             MemoryPointsOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
             $query ?: null,
         );
     }

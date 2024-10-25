@@ -5,6 +5,7 @@ namespace Albocode\CcatphpSdk\Endpoints;
 use Albocode\CcatphpSdk\DTO\Api\Setting\SettingDeleteOutput;
 use Albocode\CcatphpSdk\DTO\Api\Setting\SettingOutputItem;
 use Albocode\CcatphpSdk\DTO\Api\Setting\SettingsOutputCollection;
+use Albocode\CcatphpSdk\DTO\SettingInput;
 use GuzzleHttp\Exception\GuzzleException;
 
 class SettingsEndpoint extends AbstractEndpoint
@@ -14,57 +15,59 @@ class SettingsEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function getSettings(?string $agentId = null, ?string $userId = null): SettingsOutputCollection
+    public function getSettings(?string $agentId = null, ?string $loggedUserId = null): SettingsOutputCollection
     {
-        return $this->get($this->prefix, SettingsOutputCollection::class, $agentId, $userId);
+        return $this->get($this->prefix, SettingsOutputCollection::class, $agentId, $loggedUserId);
     }
 
     /**
-     * @param array<string, mixed> $values
-     *
      * @throws GuzzleException
      */
-    public function postSetting(array $values, ?string $agentId = null, ?string $userId = null): SettingOutputItem
-    {
+    public function postSetting(
+        SettingInput $values,
+        ?string $agentId = null,
+        ?string $loggedUserId = null
+    ): SettingOutputItem {
         return $this->postJson(
             $this->prefix,
             SettingOutputItem::class,
-            $values,
+            $values->toArray(),
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function getSetting(string $settingId, ?string $agentId = null, ?string $userId = null): SettingOutputItem
-    {
+    public function getSetting(
+        string $settingId,
+        ?string $agentId = null,
+        ?string $loggedUserId = null
+    ): SettingOutputItem {
         return $this->get(
             $this->formatUrl($settingId),
             SettingOutputItem::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
     /**
-     * @param array<string, mixed> $values
-     *
      * @throws GuzzleException
      */
     public function putSetting(
         string $settingId,
-        array $values,
+        SettingInput $values,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): SettingOutputItem {
         return $this->put(
             $this->formatUrl($settingId),
             SettingOutputItem::class,
-            $values,
+            $values->toArray(),
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -74,13 +77,13 @@ class SettingsEndpoint extends AbstractEndpoint
     public function deleteSetting(
         string $settingId,
         ?string $agentId = null,
-        ?string $userId = null
+        ?string $loggedUserId = null
     ): SettingDeleteOutput {
         return $this->delete(
             $this->formatUrl($settingId),
             SettingDeleteOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 }

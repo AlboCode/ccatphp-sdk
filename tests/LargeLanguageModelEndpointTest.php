@@ -2,8 +2,10 @@
 
 namespace Albocode\CcatphpSdk\Tests;
 
+use Albocode\CcatphpSdk\Builders\SettingInputBuilder;
 use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class LargeLanguageModelEndpointTest extends TestCase
@@ -11,7 +13,7 @@ class LargeLanguageModelEndpointTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testGetLargeLanguageModelsSettingsSuccess(): void
     {
@@ -43,7 +45,7 @@ class LargeLanguageModelEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testGetLargeLanguageModelSettingsSuccess(): void
     {
@@ -78,7 +80,7 @@ class LargeLanguageModelEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testPutLargeLanguageModelSettingsSuccess(): void
     {
@@ -95,9 +97,14 @@ class LargeLanguageModelEndpointTest extends TestCase
         ];
 
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
+        $settingInput = SettingInputBuilder::create()
+            ->setName($expected['name'])
+            ->setValue($expected['value'])
+            ->setCategory('testCategory')
+            ->build();
 
         $endpoint = $cCatClient->largeLanguageModel();
-        $result = $endpoint->putLargeLanguageModelSettings('testLargeLanguageModel', $expected);
+        $result = $endpoint->putLargeLanguageModelSettings('testLargeLanguageModel', $settingInput);
 
         foreach ($expected as $property => $value) {
             /** @var array<string, string> $property */

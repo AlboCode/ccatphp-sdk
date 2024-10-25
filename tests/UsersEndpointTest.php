@@ -42,7 +42,7 @@ class UsersEndpointTest extends TestCase
     }
 
     /**
-     * @throws \JsonException|GuzzleException
+     * @throws \JsonException|GuzzleException|Exception
      */
     public function testPostUserSuccess(): void
     {
@@ -66,7 +66,7 @@ class UsersEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testGetUsersSuccess(): void
     {
@@ -92,7 +92,7 @@ class UsersEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testGetUserSuccess(): void
     {
@@ -115,7 +115,7 @@ class UsersEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testPutUserSuccess(): void
     {
@@ -141,7 +141,7 @@ class UsersEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testDeleteUserSuccess(): void
     {
@@ -164,7 +164,7 @@ class UsersEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testGetAvailablePermissionsSuccess(): void
     {

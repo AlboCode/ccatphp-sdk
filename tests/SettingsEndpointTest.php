@@ -2,6 +2,7 @@
 
 namespace Albocode\CcatphpSdk\Tests;
 
+use Albocode\CcatphpSdk\Builders\SettingInputBuilder;
 use Albocode\CcatphpSdk\CcatUtility;
 use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
@@ -67,15 +68,21 @@ class SettingsEndpointTest extends TestCase
                     'property_first' => 'value_first',
                     'property_second' => 'value_second',
                 ],
+                'category' => 'testCategory',
                 'setting_id' => '234567890',
                 'updated_at' => '120323503863468243',
             ],
         ];
 
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
+        $settingInput = SettingInputBuilder::create()
+            ->setName($expected['setting']['name'])
+            ->setValue($expected['setting']['value'])
+            ->setCategory($expected['setting']['category'])
+            ->build();
 
         $endpoint = $cCatClient->settings();
-        $result = $endpoint->postSetting($expected);
+        $result = $endpoint->postSetting($settingInput);
 
         foreach ($expected['setting'] as $property => $value) {
             $p = CcatUtility::camelCase($property);
@@ -123,15 +130,21 @@ class SettingsEndpointTest extends TestCase
                     'property_first' => 'value_first',
                     'property_second' => 'value_second',
                 ],
+                'category' => 'testCategory',
                 'setting_id' => '234567890',
                 'updated_at' => '120323503863468243',
             ],
         ];
 
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
+        $settingInput = SettingInputBuilder::create()
+            ->setName($expected['setting']['name'])
+            ->setValue($expected['setting']['value'])
+            ->setCategory($expected['setting']['category'])
+            ->build();
 
         $endpoint = $cCatClient->settings();
-        $result = $endpoint->putSetting('234567890', $expected);
+        $result = $endpoint->putSetting('234567890', $settingInput);
 
         foreach ($expected['setting'] as $property => $value) {
             $p = CcatUtility::camelCase($property);

@@ -42,7 +42,7 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
-     * @throws \JsonException|GuzzleException
+     * @throws \JsonException|GuzzleException|Exception
      */
     public function testPostAdminSuccess(): void
     {
@@ -66,7 +66,7 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testGetAdminsSuccess(): void
     {
@@ -92,7 +92,7 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testGetAdminSuccess(): void
     {
@@ -115,7 +115,7 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testPutAdminSuccess(): void
     {
@@ -141,7 +141,7 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testDeleteAdminSuccess(): void
     {
@@ -164,7 +164,7 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testFactoryResetSuccess(): void
     {
@@ -183,7 +183,7 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws GuzzleException|\JsonException|Exception
      */
     public function testAgentResetSuccess(): void
     {

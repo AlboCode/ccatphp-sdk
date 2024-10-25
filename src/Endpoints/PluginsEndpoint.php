@@ -12,7 +12,6 @@ use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginToggleOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\Settings\PluginSettingsOutput;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Message\ResponseInterface;
 
 class PluginsEndpoint extends AbstractEndpoint
 {
@@ -25,13 +24,13 @@ class PluginsEndpoint extends AbstractEndpoint
     public function getAvailablePlugins(
         ?string $query = null,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginCollectionOutput {
         return $this->get(
             $this->prefix,
             PluginCollectionOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
             $query,
         );
     }
@@ -42,7 +41,7 @@ class PluginsEndpoint extends AbstractEndpoint
     public function installPluginFromZip(
         string $pathZip,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginInstallOutput {
         return $this->postMultipart(
             $this->formatUrl('/upload'),
@@ -55,7 +54,7 @@ class PluginsEndpoint extends AbstractEndpoint
                 ],
             ],
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -65,14 +64,14 @@ class PluginsEndpoint extends AbstractEndpoint
     public function installPluginFromRegistry(
         string $url,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginInstallFromRegistryOutput {
         return $this->postJson(
             $this->formatUrl('/upload/registry'),
             PluginInstallFromRegistryOutput::class,
             ['url' => $url],
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -82,14 +81,14 @@ class PluginsEndpoint extends AbstractEndpoint
     public function togglePlugin(
         string $pluginId,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginToggleOutput {
         return $this->put(
             $this->formatUrl('/toggle/' . $pluginId),
             PluginToggleOutput::class,
             [],
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -98,13 +97,13 @@ class PluginsEndpoint extends AbstractEndpoint
      */
     public function getPluginsSettings(
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginsSettingsOutput {
         return $this->get(
             $this->formatUrl('/settings'),
             PluginsSettingsOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -114,13 +113,13 @@ class PluginsEndpoint extends AbstractEndpoint
     public function getPluginSettings(
         string $pluginId,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginSettingsOutput {
         return $this->get(
             $this->formatUrl('/settings/' . $pluginId),
             PluginSettingsOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -133,14 +132,14 @@ class PluginsEndpoint extends AbstractEndpoint
         string $pluginId,
         array $values,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginSettingsOutput {
         return $this->put(
             $this->formatUrl('/settings/' . $pluginId),
             PluginSettingsOutput::class,
             $values,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -150,13 +149,13 @@ class PluginsEndpoint extends AbstractEndpoint
     public function getPluginDetails(
         string $pluginId,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginDetailsOutput {
         return $this->get(
             $this->formatUrl($pluginId),
             PluginDetailsOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -166,13 +165,13 @@ class PluginsEndpoint extends AbstractEndpoint
     public function deletePlugin(
         string $pluginId,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PluginDeleteOutput {
         return $this->delete(
             $this->formatUrl($pluginId),
             PluginDeleteOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 }

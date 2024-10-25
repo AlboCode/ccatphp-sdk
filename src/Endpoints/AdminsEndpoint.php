@@ -42,7 +42,7 @@ class AdminsEndpoint extends AbstractEndpoint
         string $username,
         string $password,
         ?array $permissions = null,
-        ?string $adminId = null
+        ?string $loggedAdminId = null
     ): AdminOutput {
         $payload = [
             'username' => $username,
@@ -57,7 +57,7 @@ class AdminsEndpoint extends AbstractEndpoint
             AdminOutput::class,
             $payload,
             $this->systemId,
-            $adminId,
+            $loggedAdminId,
         );
     }
 
@@ -65,7 +65,7 @@ class AdminsEndpoint extends AbstractEndpoint
      * @return AdminOutput[]
      * @throws GuzzleException|\JsonException
      */
-    public function getAdmins(?int $limit = null, ?int $skip = null, ?string $adminId = null): array
+    public function getAdmins(?int $limit = null, ?int $skip = null, ?string $loggedAdminId = null): array
     {
         $query = [];
         if ($limit) {
@@ -75,7 +75,7 @@ class AdminsEndpoint extends AbstractEndpoint
             $query['skip'] = $skip;
         }
 
-        $response = $this->getHttpClient($this->systemId, $adminId)->get(
+        $response = $this->getHttpClient($this->systemId, $loggedAdminId)->get(
             $this->prefix,
             $query ? ['query' => $query] : []
         );
@@ -109,11 +109,11 @@ class AdminsEndpoint extends AbstractEndpoint
      * @throws GuzzleException
      */
     public function putAdmin(
-        string $userId,
+        string $adminId,
         ?string $username = null,
         ?string $password = null,
         ?array $permissions = null,
-        ?string $adminId = null,
+        ?string $loggedAdminId = null,
     ): AdminOutput {
         $payload = [];
         if ($username !== null) {
@@ -127,52 +127,52 @@ class AdminsEndpoint extends AbstractEndpoint
         }
 
         return $this->put(
-            $this->formatUrl($userId),
+            $this->formatUrl($adminId),
             AdminOutput::class,
             $payload,
             $this->systemId,
-            $adminId,
+            $loggedAdminId,
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function deleteAdmin(string $adminId, ?string $loggedUserId = null): AdminOutput
+    public function deleteAdmin(string $adminId, ?string $loggedAdminId = null): AdminOutput
     {
         return $this->delete(
             $this->formatUrl($adminId),
             AdminOutput::class,
             $this->systemId,
-            $loggedUserId
+            $loggedAdminId
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function factoryReset(?string $adminId = null): ResetOutput
+    public function factoryReset(?string $loggedAdminId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/factory_reset/'),
             ResetOutput::class,
             [],
             $this->systemId,
-            $adminId
+            $loggedAdminId
         );
     }
 
     /**
      * @throws GuzzleException
      */
-    public function agentReset(?string $adminId = null): ResetOutput
+    public function agentReset(?string $loggedAdminId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/agent_reset/'),
             ResetOutput::class,
             [],
             $this->systemId,
-            $adminId
+            $loggedAdminId,
         );
     }
 }

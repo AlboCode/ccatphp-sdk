@@ -6,6 +6,7 @@ use Albocode\CcatphpSdk\DTO\Message;
 use Albocode\CcatphpSdk\DTO\Response;
 use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class MessageEndpointTest extends TestCase
@@ -13,7 +14,7 @@ class MessageEndpointTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws \JsonException|GuzzleException
+     * @throws \JsonException|GuzzleException|Exception
      */
     public function testSendMessage(): void
     {

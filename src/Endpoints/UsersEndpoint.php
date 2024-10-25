@@ -33,11 +33,12 @@ class UsersEndpoint extends AbstractEndpoint
     }
 
     /**
+     * @return array<int|string, mixed>
      * @throws GuzzleException
      */
-    public function getAvailablePermissions(?string $agentId = null, ?string $userId = null): array
+    public function getAvailablePermissions(?string $agentId = null, ?string $loggedUserId = null): array
     {
-        $response = $this->getHttpClient($agentId, $userId)->get('/auth/available-permissions');
+        $response = $this->getHttpClient($agentId, $loggedUserId)->get('/auth/available-permissions');
 
         return $this->client->getSerializer()->decode($response->getBody()->getContents(), 'json');
     }
@@ -92,13 +93,13 @@ class UsersEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function getUser(string $userId, ?string $agentId = null, ?string $requestUserId = null): UserOutput
+    public function getUser(string $userId, ?string $agentId = null, ?string $loggedUserId = null): UserOutput
     {
         return $this->get(
             $this->formatUrl($userId),
             UserOutput::class,
             $agentId,
-            $requestUserId
+            $loggedUserId
         );
     }
 
@@ -113,7 +114,7 @@ class UsersEndpoint extends AbstractEndpoint
         ?string $password = null,
         ?array $permissions = null,
         ?string $agentId = null,
-        ?string $requestUserId = null,
+        ?string $loggedUserId = null,
     ): UserOutput {
         $payload = [];
         if ($username !== null) {
@@ -131,17 +132,20 @@ class UsersEndpoint extends AbstractEndpoint
             UserOutput::class,
             $payload,
             $agentId,
-            $requestUserId,
+            $loggedUserId,
         );
     }
 
-    public function deleteUser(string $userId, ?string $agentId = null, ?string $requestUserId = null): UserOutput
+    /**
+     * @throws GuzzleException
+     */
+    public function deleteUser(string $userId, ?string $agentId = null, ?string $loggedUserId = null): UserOutput
     {
         return $this->delete(
             sprintf('/users/%s', $userId),
             UserOutput::class,
             $agentId,
-            $requestUserId
+            $loggedUserId
         );
     }
 }

@@ -4,6 +4,7 @@ namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Factory\FactoryObjectSettingOutput;
 use Albocode\CcatphpSdk\DTO\Api\Factory\FactoryObjectSettingsOutput;
+use Albocode\CcatphpSdk\DTO\SettingInput;
 use GuzzleHttp\Exception\GuzzleException;
 
 class AuthHandlerEndpoint extends AbstractEndpoint
@@ -15,13 +16,13 @@ class AuthHandlerEndpoint extends AbstractEndpoint
      */
     public function getAuthHandlersSettings(
         ?string $agentId = null,
-        ?string $userId = null
+        ?string $loggedUserId = null
     ): FactoryObjectSettingsOutput {
         return $this->get(
             $this->formatUrl('/settings'),
             FactoryObjectSettingsOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
@@ -31,33 +32,31 @@ class AuthHandlerEndpoint extends AbstractEndpoint
     public function getAuthHandlerSettings(
         string $authHandler,
         ?string $agentId = null,
-        ?string $userId = null
+        ?string $loggedUserId = null
     ): FactoryObjectSettingOutput {
         return $this->get(
             $this->formatUrl('/settings/' . $authHandler),
             FactoryObjectSettingOutput::class,
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 
     /**
-     * @param array<string, mixed> $values
-     *
      * @throws GuzzleException
      */
     public function putAuthHandlerSettings(
         string $authHandler,
-        array $values,
+        SettingInput $values,
         ?string $agentId = null,
-        ?string $userId = null
+        ?string $loggedUserId = null
     ): FactoryObjectSettingOutput {
         return $this->put(
             $this->formatUrl('/settings/' . $authHandler),
             FactoryObjectSettingOutput::class,
-            $values,
+            $values->toArray(),
             $agentId,
-            $userId,
+            $loggedUserId,
         );
     }
 }

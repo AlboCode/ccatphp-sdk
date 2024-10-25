@@ -17,11 +17,11 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         ?int $chunkSize,
         ?int $chunkOverlap,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PromiseInterface {
         $fileName = $fileName ?: basename($filePath);
 
-        return $this->getHttpClient($agentId, $userId)->postAsync($this->prefix, [
+        return $this->getHttpClient($agentId, $loggedUserId)->postAsync($this->prefix, [
             'multipart' => [
                 [
                     'name' => 'file',
@@ -48,7 +48,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         ?int $chunkSize = null,
         ?int $chunkOverlap = null,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PromiseInterface {
         $multipartData = [];
 
@@ -74,7 +74,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
             ];
         }
 
-        return $this->getHttpClient($agentId, $userId)->postAsync($this->formatUrl('/batch'), [
+        return $this->getHttpClient($agentId, $loggedUserId)->postAsync($this->formatUrl('/batch'), [
             'multipart' => $multipartData,
         ]);
     }
@@ -84,7 +84,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         ?int $chunkSize = null,
         ?int $chunkOverlap = null,
         ?string $agentId = null,
-        ?string $userId = null
+        ?string $loggedUserId = null
     ): PromiseInterface {
         $payload = ['url' => $webUrl];
         if ($chunkSize) {
@@ -94,7 +94,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
             $payload['chunk_overlap'] = $chunkOverlap;
         }
 
-        return $this->getHttpClient($agentId, $userId)->postAsync($this->formatUrl('/web'), [
+        return $this->getHttpClient($agentId, $loggedUserId)->postAsync($this->formatUrl('/web'), [
             'json' => $payload,
         ]);
     }
@@ -103,11 +103,11 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         string $filePath,
         ?string $fileName,
         ?string $agentId = null,
-        ?string $userId = null,
+        ?string $loggedUserId = null,
     ): PromiseInterface {
         $fileName = $fileName ?: basename($filePath);
 
-        return $this->getHttpClient($agentId, $userId)->postAsync($this->formatUrl('/memory'), [
+        return $this->getHttpClient($agentId, $loggedUserId)->postAsync($this->formatUrl('/memory'), [
             'multipart' => [
                 [
                     'name' => 'file',
@@ -121,13 +121,13 @@ class RabbitHoleEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function getAllowedMimeTypes(?string $agentId = null, ?string $userId = null): AllowedMimeTypesOutput
+    public function getAllowedMimeTypes(?string $agentId = null, ?string $loggedUserId = null): AllowedMimeTypesOutput
     {
         return $this->get(
             $this->formatUrl('/allowed-mimetypes'),
             AllowedMimeTypesOutput::class,
             $agentId,
-            $userId
+            $loggedUserId
         );
     }
 }

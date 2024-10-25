@@ -60,6 +60,9 @@ class BaseTest extends TestCase
         self::assertInstanceOf(WsClient::class, $cCatClient->getWsClient()->getClient());
     }
 
+    /**
+     * @throws Exception|\JsonException
+     */
     public function testFactorySuccess(): void
     {
         $cCatClient = $this->getCCatClient($this->apikey);
