@@ -4,6 +4,7 @@ namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginCollectionOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDeleteOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDetailsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallFromRegistryOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginsSettingsOutput;
@@ -21,7 +22,7 @@ class PluginsEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function getPlugins(
+    public function getAvailablePlugins(
         ?string $query = null,
         ?string $agentId = null,
         ?string $userId = null,
@@ -42,7 +43,7 @@ class PluginsEndpoint extends AbstractEndpoint
         string $pathZip,
         ?string $agentId = null,
         ?string $userId = null,
-    ): PluginInstallOutput{
+    ): PluginInstallOutput {
         return $this->postMultipart(
             $this->formatUrl('/upload'),
             PluginInstallOutput::class,
@@ -98,7 +99,7 @@ class PluginsEndpoint extends AbstractEndpoint
     public function getPluginsSettings(
         ?string $agentId = null,
         ?string $userId = null,
-    ): PluginSettingsOutput {
+    ): PluginsSettingsOutput {
         return $this->get(
             $this->formatUrl('/settings'),
             PluginsSettingsOutput::class,
@@ -108,13 +109,10 @@ class PluginsEndpoint extends AbstractEndpoint
     }
 
     /**
-     * @param array<string, mixed> $values
-     *
      * @throws GuzzleException
      */
     public function getPluginSettings(
         string $pluginId,
-        array $values,
         ?string $agentId = null,
         ?string $userId = null,
     ): PluginSettingsOutput {
@@ -153,10 +151,10 @@ class PluginsEndpoint extends AbstractEndpoint
         string $pluginId,
         ?string $agentId = null,
         ?string $userId = null,
-    ): PluginSettingsOutput {
+    ): PluginDetailsOutput {
         return $this->get(
             $this->formatUrl($pluginId),
-            PluginSettingsOutput::class,
+            PluginDetailsOutput::class,
             $agentId,
             $userId,
         );
@@ -169,7 +167,7 @@ class PluginsEndpoint extends AbstractEndpoint
         string $pluginId,
         ?string $agentId = null,
         ?string $userId = null,
-    ): ResponseInterface {
+    ): PluginDeleteOutput {
         return $this->delete(
             $this->formatUrl($pluginId),
             PluginDeleteOutput::class,

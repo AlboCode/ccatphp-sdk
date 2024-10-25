@@ -30,4 +30,24 @@ class PluginItemOutput
     /** @var array<int, ToolOutput> */
     public array $tools;
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'author_name' => $this->authorName,
+            'author_url' => $this->authorUrl,
+            'plugin_url' => $this->pluginUrl,
+            'tags' => $this->tags,
+            'thumb' => $this->thumb,
+            'version' => $this->version,
+            'active' => $this->active,
+            'hooks' => array_map(fn(HookOutput $item) => $item->toArray(), $this->hooks),
+            'tools' => array_map(fn(ToolOutput $item) => $item->toArray(), $this->tools),
+        ];
+    }
 }

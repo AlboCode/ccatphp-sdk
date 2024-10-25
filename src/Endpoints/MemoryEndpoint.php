@@ -83,8 +83,10 @@ class MemoryEndpoint extends AbstractEndpoint
     /**
      * @throws GuzzleException
      */
-    public function deleteConversationHistory(?string $agentId = null, ?string $userId = null): ConversationHistoryDeleteOutput
-    {
+    public function deleteConversationHistory(
+        ?string $agentId = null,
+        ?string $userId = null
+    ): ConversationHistoryDeleteOutput {
         return $this->delete(
             $this->formatUrl('/conversation_history'),
             ConversationHistoryDeleteOutput::class,
