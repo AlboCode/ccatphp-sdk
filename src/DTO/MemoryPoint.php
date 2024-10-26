@@ -10,6 +10,15 @@ class MemoryPoint
     public array $metadata;
 
     /**
+     * @param array<string, mixed> $metadata
+     */
+    public function __construct(string $content, array $metadata)
+    {
+        $this->content = $content;
+        $this->metadata = $metadata;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function toArray(): array

@@ -35,21 +35,18 @@ class WSClient
         return $this;
     }
 
-    public function getClient(?string $agentId = null, ?string $userId = null): Client
+    public function getClient(?string $agentId = null): Client
     {
         if (!$this->apikey && !$this->token) {
             throw new \InvalidArgumentException('You must provide an apikey or a token');
         }
 
-        return $this->createWsClient($agentId, $userId);
+        return $this->createWsClient($agentId);
     }
 
-    protected function createWsClient(?string $agentId = null, ?string $userId = null): Client
+    protected function createWsClient(?string $agentId = null): Client
     {
-        $userId = $userId ?? 'user';
-        $agentId = $agentId ?? 'agent';
-
-        $path = sprintf('ws/%s/%s', $userId, $agentId);
+        $path = sprintf('ws/%s', $agentId);
         $path .= $this->apikey ? '?apikey=' . $this->apikey : '?token=' . $this->token;
 
         $wsUri = (new Uri())

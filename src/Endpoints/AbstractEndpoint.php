@@ -17,7 +17,7 @@ abstract class AbstractEndpoint
     protected CCatClient $client;
     protected string $prefix;
 
-    protected string $systemId = "system";
+    protected string $systemId = 'system';
 
     public function __construct(CCatClient $client)
     {
@@ -31,18 +31,12 @@ abstract class AbstractEndpoint
 
     protected function getHttpClient(?string $agentId = null, ?string $userId = null): Client
     {
-        $userId = $userId ?? 'user';
-        $agentId = $agentId ?? 'agent';
-
         return $this->client->getHttpClient()->getClient($agentId, $userId);
     }
 
-    protected function getWsClient(?string $agentId = null, ?string $userId = null): WebSocketClient
+    protected function getWsClient(?string $agentId = null): WebSocketClient
     {
-        $userId = $userId ?? 'user';
-        $agentId = $agentId ?? 'agent';
-
-        return $this->client->getWsClient()->getClient($agentId, $userId);
+        return $this->client->getWsClient()->getClient($agentId);
     }
 
     /**

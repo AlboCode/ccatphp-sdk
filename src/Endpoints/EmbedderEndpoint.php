@@ -12,45 +12,48 @@ class EmbedderEndpoint extends AbstractEndpoint
     protected string $prefix = '/embedder';
 
     /**
+     * This endpoint returns the settings of all embedders. Embedders are set to a system level, so usable by all
+     * the agents in the system.
+     *
      * @throws GuzzleException
      */
-    public function getEmbeddersSettings(?string $loggedAdminId = null): FactoryObjectSettingsOutput
+    public function getEmbeddersSettings(): FactoryObjectSettingsOutput
     {
         return $this->get(
             $this->formatUrl('/settings'),
             FactoryObjectSettingsOutput::class,
             $this->systemId,
-            $loggedAdminId,
         );
     }
 
     /**
+     * This endpoint returns the settings of a specific embedder. Embedders are set to a system level, so usable by all
+     * the agents in the system.
+     *
      * @throws GuzzleException
      */
-    public function getEmbedderSettings(string $embedder, ?string $loggedAdminId = null): FactoryObjectSettingOutput
+    public function getEmbedderSettings(string $embedder): FactoryObjectSettingOutput
     {
         return $this->get(
             $this->formatUrl('/settings/' . $embedder),
             FactoryObjectSettingOutput::class,
             $this->systemId,
-            $loggedAdminId,
         );
     }
 
     /**
+     * This endpoint updates the settings of a specific embedder. Embedders are set to a system level, so usable by all
+     * the agents in the system.
+     *
      * @throws GuzzleException
      */
-    public function putEmbedderSettings(
-        string $embedder,
-        SettingInput $values,
-        ?string $loggedAdminId = null
-    ): FactoryObjectSettingOutput {
+    public function putEmbedderSettings(string $embedder, SettingInput $values): FactoryObjectSettingOutput
+    {
         return $this->put(
             $this->formatUrl('/settings/' . $embedder),
             FactoryObjectSettingOutput::class,
             $values->toArray(),
             $this->systemId,
-            $loggedAdminId,
         );
     }
 }

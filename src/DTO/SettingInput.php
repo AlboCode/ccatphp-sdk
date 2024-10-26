@@ -6,8 +6,8 @@ class SettingInput
 {
     public string $name;
 
-    /** @var array<string, mixed> */
-    public array $value;
+    /** @var null|array<string, mixed> */
+    public ?array $value = [];
 
     public ?string $category;
 

@@ -61,4 +61,4 @@ down:  ## Stop the project
 bash:  ## Access the php container
 	docker compose exec php bash
 test:  ## Run the tests
-	docker compose exec -it php $(SHELL) -c "vendor/bin/phpunit --colors=always $(FURTHER_ARGS)"
+	docker compose exec -it php $(SHELL) -c "vendor/bin/phpunit --colors=always --testdox $(FURTHER_ARGS)"

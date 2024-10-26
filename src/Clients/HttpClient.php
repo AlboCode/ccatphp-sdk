@@ -62,7 +62,6 @@ class HttpClient
             throw new \InvalidArgumentException('You must provide an apikey or a token');
         }
 
-        $this->userId = $userId ?? 'user';
         $this->agentId = $agentId ?? 'agent';
 
         return $this->httpClient;
@@ -77,7 +76,7 @@ class HttpClient
     {
         return function (RequestInterface &$request, array $requestOptions) {
             if (!empty($this->apikey)) {
-                $request = $request->withHeader('access_token', $this->apikey);
+                $request = $request->withHeader('Authorization', 'Bearer' . $this->apikey);
             }
             if (!empty($this->userId)) {
                 $request = $request->withHeader('user_id', $this->userId);
@@ -93,9 +92,6 @@ class HttpClient
         return function (RequestInterface &$request, array $requestOptions) {
             if (!empty($this->token)) {
                 $request = $request->withHeader('Authorization', 'Bearer ' . $this->token);
-            }
-            if (!empty($this->userId)) {
-                $request = $request->withHeader('user_id', $this->userId);
             }
             if (!empty($this->agentId)) {
                 $request = $request->withHeader('agent_id', $this->agentId);

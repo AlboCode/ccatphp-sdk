@@ -45,5 +45,4 @@ class SettingInputBuilder implements BaseBuilder
     {
         return new SettingInput($this->name, $this->value, $this->category);
     }
-
 }
