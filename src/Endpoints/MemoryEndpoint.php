@@ -3,7 +3,7 @@
 namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsOutput;
-use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsWipeOutput;
+use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsDestroyOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\ConversationHistoryDeleteOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\ConversationHistoryOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointDeleteOutput;
@@ -46,11 +46,11 @@ class MemoryEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function deleteMemoryCollections(?string $agentId = null): CollectionsWipeOutput
+    public function deleteMemoryCollections(?string $agentId = null): CollectionsDestroyOutput
     {
         return $this->delete(
             $this->formatUrl('/collections'),
-            CollectionsWipeOutput::class,
+            CollectionsDestroyOutput::class,
             $agentId,
         );
     }
@@ -61,11 +61,11 @@ class MemoryEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function deleteMemoryCollection(Collection $collection, ?string $agentId = null): CollectionsWipeOutput
+    public function deleteMemoryCollection(Collection $collection, ?string $agentId = null): CollectionsDestroyOutput
     {
         return $this->delete(
             $this->formatUrl('/collections/' . $collection->value),
-            CollectionsWipeOutput::class,
+            CollectionsDestroyOutput::class,
             $agentId,
         );
     }

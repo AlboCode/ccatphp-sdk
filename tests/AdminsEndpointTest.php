@@ -200,4 +200,23 @@ class AdminsEndpointTest extends TestCase
         self::assertTrue($result->deletedSettings);
         self::assertTrue($result->deletedMemories);
     }
+
+    /**
+     * @throws GuzzleException|\JsonException|Exception
+     */
+    public function testAgentDestroySuccess(): void
+    {
+        $expected = [
+            'deleted_settings' => true,
+            'deleted_memories' => true,
+        ];
+
+        $cCatClient = $this->getCCatClient($this->apikey, $expected);
+
+        $endpoint = $cCatClient->admins();
+        $result = $endpoint->agentDestroy();
+
+        self::assertTrue($result->deletedSettings);
+        self::assertTrue($result->deletedMemories);
+    }
 }

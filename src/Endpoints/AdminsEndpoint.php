@@ -163,4 +163,19 @@ class AdminsEndpoint extends AbstractEndpoint
             $this->systemId,
         );
     }
+
+    /**
+     * This endpoint is used to reset the agent to factory settings. This will delete all data in the agent.
+     *
+     * @throws GuzzleException
+     */
+    public function agentDestroy(): ResetOutput
+    {
+        return $this->postJson(
+            $this->formatUrl('/utils/agent_destroy/'),
+            ResetOutput::class,
+            [],
+            $this->systemId,
+        );
+    }
 }
