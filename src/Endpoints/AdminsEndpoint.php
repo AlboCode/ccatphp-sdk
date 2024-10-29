@@ -61,7 +61,9 @@ class AdminsEndpoint extends AbstractEndpoint
             $payload['permissions'] = $permissions;
         }
 
-        return $this->postJson($this->prefix, AdminOutput::class, $payload, $this->systemId);
+        return $this->postJson(
+            $this->formatUrl('/users'), AdminOutput::class, $payload, $this->systemId
+        );
     }
 
     /**
@@ -81,7 +83,7 @@ class AdminsEndpoint extends AbstractEndpoint
         }
 
         $response = $this->getHttpClient($this->systemId)->get(
-            $this->prefix,
+            $this->formatUrl('/users'),
             $query ? ['query' => $query] : []
         );
 
@@ -102,7 +104,7 @@ class AdminsEndpoint extends AbstractEndpoint
      */
     public function getAdmin(string $adminId): AdminOutput
     {
-        return $this->get($this->formatUrl($adminId), AdminOutput::class, $this->systemId);
+        return $this->get($this->formatUrl('/users/' . $adminId), AdminOutput::class, $this->systemId);
     }
 
     /**
@@ -129,7 +131,9 @@ class AdminsEndpoint extends AbstractEndpoint
             $payload['permissions'] = $permissions;
         }
 
-        return $this->put($this->formatUrl($adminId), AdminOutput::class, $payload, $this->systemId);
+        return $this->put(
+            $this->formatUrl('/users/' . $adminId), AdminOutput::class, $payload, $this->systemId
+        );
     }
 
     /**
@@ -139,7 +143,7 @@ class AdminsEndpoint extends AbstractEndpoint
      */
     public function deleteAdmin(string $adminId): AdminOutput
     {
-        return $this->delete($this->formatUrl($adminId), AdminOutput::class, $this->systemId);
+        return $this->delete($this->formatUrl('/users/' . $adminId), AdminOutput::class, $this->systemId);
     }
 
     /**
