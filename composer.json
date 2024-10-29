@@ -11,15 +11,20 @@
     },
     "autoload": {
         "psr-4": {
-            "Albocode\\CcatphpSdk\\": "src/"
+            "Albocode\\CcatphpSdk\\": "src/",
+            "Albocode\\CcatphpSdk\\Tests\\": "tests/"
         },
         "classmap": [
-            "src/"
+            "src/",
+            "tests/"
         ]
     },
     "authors": [
         {
             "name": "Riccardo Albero"
+        },
+        {
+            "name": "Matteo Cacciola"
         }
     ],
     "require-dev": {

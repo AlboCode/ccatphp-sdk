@@ -11,9 +11,3 @@ services:
       - "8082:8081"
     volumes:
       - ./:/var/www/ccat-php
-    networks:
-      - cheshire-cat_default
-
-networks:
-  cheshire-cat_default:
-    external: true
