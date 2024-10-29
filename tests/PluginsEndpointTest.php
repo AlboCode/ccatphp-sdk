@@ -16,7 +16,7 @@ class PluginsEndpointTest extends TestCase
     /**
      * @throws GuzzleException|Exception|\JsonException
      */
-    public function testGetPluginsSuccess(): void
+    public function testGetAvailablePluginsSuccess(): void
     {
         $expected = [
             'filters' => [
@@ -86,45 +86,6 @@ class PluginsEndpointTest extends TestCase
         $result = $endpoint->getAvailablePlugins();
 
         self::assertEquals($expected, $result->toArray());
-    }
-
-    /**
-     * @throws GuzzleException|Exception|\JsonException
-     */
-    public function testInstallPluginFromZipSuccess(): void
-    {
-        $expected = [
-            'filename' => 'tests/Resources/test.txt.zip',
-            'content_type' => 'application/zip',
-        ];
-
-        $cCatClient = $this->getCCatClient($this->apikey, $expected);
-
-        $endpoint = $cCatClient->plugins();
-        $result = $endpoint->installPluginFromZip($expected['filename']);
-
-        self::assertEquals($expected['filename'], $result->filename);
-        self::assertEquals($expected['content_type'], $result->contentType);
-    }
-
-    /**
-     * @throws GuzzleException|Exception|\JsonException
-     */
-    public function testInstallPluginFromRegistrySuccess(): void
-    {
-        $url = 'https://plugin1.com';
-        $expected = [
-            'url' => $url,
-            'info' => 'Plugin is being installed asynchronously',
-        ];
-
-        $cCatClient = $this->getCCatClient($this->apikey, $expected);
-
-        $endpoint = $cCatClient->plugins();
-        $result = $endpoint->installPluginFromRegistry($url);
-
-        self::assertEquals($expected['url'], $result->url);
-        self::assertEquals($expected['info'], $result->info);
     }
 
     /**
@@ -280,22 +241,5 @@ class PluginsEndpointTest extends TestCase
         $result = $endpoint->getPluginDetails('setting1');
 
         self::assertEquals($expected['data'], $result->data);
-    }
-
-    /**
-     * @throws GuzzleException|Exception|\JsonException
-     */
-    public function testDeletePluginSuccess(): void
-    {
-        $expected = [
-            'deleted' => 'setting_1',
-        ];
-
-        $cCatClient = $this->getCCatClient($this->apikey, $expected);
-
-        $endpoint = $cCatClient->plugins();
-        $result = $endpoint->deletePlugin('setting1');
-
-        self::assertEquals($expected['deleted'], $result->deleted);
     }
 }

@@ -3,9 +3,17 @@
 namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Admins\ResetOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginCollectionOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDeleteOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDetailsOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallFromRegistryOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginsSettingsOutput;
+use Albocode\CcatphpSdk\DTO\Api\Plugin\Settings\PluginSettingsOutput;
 use Albocode\CcatphpSdk\DTO\Api\TokenOutput;
 use Albocode\CcatphpSdk\DTO\Api\Admins\AdminOutput;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Utils;
 
 class AdminsEndpoint extends AbstractEndpoint
 {
@@ -175,6 +183,114 @@ class AdminsEndpoint extends AbstractEndpoint
             $this->formatUrl('/utils/agent_destroy/'),
             ResetOutput::class,
             [],
+            $this->systemId,
+        );
+    }
+
+    /**
+     * This endpoint returns the available plugins, at a system level.
+     *
+     * @throws GuzzleException
+     */
+    public function getAvailablePlugins(?string $query = null): PluginCollectionOutput
+    {
+        return $this->get(
+            $this->prefix . '/plugins',
+            PluginCollectionOutput::class,
+            $this->systemId,
+            null,
+            $query,
+        );
+    }
+
+    /**
+     * This endpoint installs a plugin from a ZIP file.
+     *
+     * @throws GuzzleException
+     */
+    public function installPluginFromZip(string $pathZip): PluginInstallOutput
+    {
+        return $this->postMultipart(
+            $this->formatUrl('/plugins/upload'),
+            PluginInstallOutput::class,
+            [
+                [
+                    'name' => 'file',
+                    'contents' => Utils::tryFopen($pathZip, 'r'),
+                    'filename' => basename($pathZip),
+                ],
+            ],
+            $this->systemId,
+        );
+    }
+
+    /**
+     * This endpoint installs a plugin from the registry.
+     *
+     * @throws GuzzleException
+     */
+    public function installPluginFromRegistry(string $url): PluginInstallFromRegistryOutput
+    {
+        return $this->postJson(
+            $this->formatUrl('/plugins/upload/registry'),
+            PluginInstallFromRegistryOutput::class,
+            ['url' => $url],
+            $this->systemId,
+        );
+    }
+
+    /**
+     * This endpoint retrieves the plugins settings, i.e. the default ones at a system level.
+     *
+     * @throws GuzzleException
+     */
+    public function getPluginsSettings(): PluginsSettingsOutput
+    {
+        return $this->get(
+            $this->formatUrl('/settings'),
+            PluginsSettingsOutput::class,
+            $this->systemId,
+        );
+    }
+
+    /**
+     * This endpoint retrieves the plugin settings, i.e. the default ones at a system level.
+     *
+     * @throws GuzzleException
+     */
+    public function getPluginSettings(string $pluginId): PluginSettingsOutput
+    {
+        return $this->get(
+            $this->formatUrl('/settings/' . $pluginId),
+            PluginSettingsOutput::class,
+            $this->systemId,
+        );
+    }
+
+    /**
+     * This endpoint retrieves the plugin details, at a system level.
+     *
+     * @throws GuzzleException
+     */
+    public function getPluginDetails(string $pluginId): PluginDetailsOutput
+    {
+        return $this->get(
+            $this->formatUrl($pluginId),
+            PluginDetailsOutput::class,
+            $this->systemId,
+        );
+    }
+
+    /**
+     * This endpoint deletes a plugin, at a system level.
+     *
+     * @throws GuzzleException
+     */
+    public function deletePlugin(string $pluginId): PluginDeleteOutput
+    {
+        return $this->delete(
+            $this->formatUrl('/plugins/' . $pluginId),
+            PluginDeleteOutput::class,
             $this->systemId,
         );
     }

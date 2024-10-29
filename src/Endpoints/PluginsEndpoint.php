@@ -3,15 +3,11 @@
 namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginCollectionOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDeleteOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDetailsOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallFromRegistryOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginsSettingsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginToggleOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\Settings\PluginSettingsOutput;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Utils;
 
 class PluginsEndpoint extends AbstractEndpoint
 {
@@ -31,44 +27,6 @@ class PluginsEndpoint extends AbstractEndpoint
             $agentId,
             null,
             $query,
-        );
-    }
-
-    /**
-     * This endpoint installs a plugin from a ZIP file, either for the agent identified by the agentId parameter
-     * (for multi-agent installations) or for the default agent (for single-agent installations).
-     *
-     * @throws GuzzleException
-     */
-    public function installPluginFromZip(string $pathZip, ?string $agentId = null): PluginInstallOutput
-    {
-        return $this->postMultipart(
-            $this->formatUrl('/upload'),
-            PluginInstallOutput::class,
-            [
-                [
-                    'name' => 'file',
-                    'contents' => Utils::tryFopen($pathZip, 'r'),
-                    'filename' => basename($pathZip),
-                ],
-            ],
-            $agentId,
-        );
-    }
-
-    /**
-     * This endpoint installs a plugin from the registry, either for the agent identified by the agentId parameter
-     * (for multi-agent installations) or for the default agent (for single-agent installations).
-     *
-     * @throws GuzzleException
-     */
-    public function installPluginFromRegistry(string $url, ?string $agentId = null): PluginInstallFromRegistryOutput
-    {
-        return $this->postJson(
-            $this->formatUrl('/upload/registry'),
-            PluginInstallFromRegistryOutput::class,
-            ['url' => $url],
-            $agentId,
         );
     }
 
@@ -147,21 +105,6 @@ class PluginsEndpoint extends AbstractEndpoint
         return $this->get(
             $this->formatUrl($pluginId),
             PluginDetailsOutput::class,
-            $agentId,
-        );
-    }
-
-    /**
-     * This endpoint deletes a plugin, either for the agent identified by the agentId parameter (for multi-agent
-     * installations) or for the default agent (for single-agent installations).
-     *
-     * @throws GuzzleException
-     */
-    public function deletePlugin(string $pluginId, ?string $agentId = null): PluginDeleteOutput
-    {
-        return $this->delete(
-            $this->formatUrl($pluginId),
-            PluginDeleteOutput::class,
             $agentId,
         );
     }
