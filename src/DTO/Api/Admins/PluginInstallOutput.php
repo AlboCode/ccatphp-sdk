@@ -1,6 +1,8 @@
 <?php
 
-namespace Albocode\CcatphpSdk\DTO\Api\Plugin;
+namespace Albocode\CcatphpSdk\DTO\Api\Admins;
+
+use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginToggleOutput;
 
 class PluginInstallOutput extends PluginToggleOutput
 {

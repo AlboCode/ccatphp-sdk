@@ -429,6 +429,7 @@ class AdminsEndpointTest extends TestCase
     {
         $expected = [
             'data' => [
+                'id' => 'core_plugin',
                 'title' => 'Setting 1',
                 'active' => true,
                 'hooks' => [

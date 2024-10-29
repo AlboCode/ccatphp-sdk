@@ -214,32 +214,4 @@ class PluginsEndpointTest extends TestCase
 
         self::assertInstanceOf(PluginSettingsOutput::class, $result);
     }
-
-    /**
-     * @throws GuzzleException|Exception|\JsonException
-     */
-    public function testGetPluginDetailsSuccess(): void
-    {
-        $expected = [
-            'data' => [
-                'title' => 'Setting 1',
-                'active' => true,
-                'hooks' => [
-                    ['name' => 'hook1', 'priority' => 1],
-                    ['name' => 'hook2', 'priority' => 0],
-                ],
-                'tools' => [
-                    ['name' => 'tool1', 'priority' => 1],
-                    ['name' => 'tool2', 'priority' => 0],
-                ],
-            ],
-        ];
-
-        $cCatClient = $this->getCCatClient($this->apikey, $expected);
-
-        $endpoint = $cCatClient->plugins();
-        $result = $endpoint->getPluginDetails('setting1');
-
-        self::assertEquals($expected['data'], $result->data);
-    }
 }

@@ -2,16 +2,16 @@
 
 namespace Albocode\CcatphpSdk\Endpoints;
 
+use Albocode\CcatphpSdk\DTO\Api\Admins\AdminOutput;
+use Albocode\CcatphpSdk\DTO\Api\Admins\PluginDeleteOutput;
+use Albocode\CcatphpSdk\DTO\Api\Admins\PluginDetailsOutput;
+use Albocode\CcatphpSdk\DTO\Api\Admins\PluginInstallFromRegistryOutput;
+use Albocode\CcatphpSdk\DTO\Api\Admins\PluginInstallOutput;
 use Albocode\CcatphpSdk\DTO\Api\Admins\ResetOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginCollectionOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDeleteOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDetailsOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallFromRegistryOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginInstallOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginsSettingsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\Settings\PluginSettingsOutput;
 use Albocode\CcatphpSdk\DTO\Api\TokenOutput;
-use Albocode\CcatphpSdk\DTO\Api\Admins\AdminOutput;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Utils;
 

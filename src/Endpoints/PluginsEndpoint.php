@@ -3,7 +3,6 @@
 namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginCollectionOutput;
-use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginDetailsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginsSettingsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\PluginToggleOutput;
 use Albocode\CcatphpSdk\DTO\Api\Plugin\Settings\PluginSettingsOutput;
@@ -90,21 +89,6 @@ class PluginsEndpoint extends AbstractEndpoint
             $this->formatUrl('/settings/' . $pluginId),
             PluginSettingsOutput::class,
             $values,
-            $agentId,
-        );
-    }
-
-    /**
-     * This endpoint retrieves the plugin details, either for the agent identified by the agentId parameter
-     * (for multi-agent installations) or for the default agent (for single-agent installations).
-     *
-     * @throws GuzzleException
-     */
-    public function getPluginDetails(string $pluginId, ?string $agentId = null): PluginDetailsOutput
-    {
-        return $this->get(
-            $this->formatUrl($pluginId),
-            PluginDetailsOutput::class,
             $agentId,
         );
     }
