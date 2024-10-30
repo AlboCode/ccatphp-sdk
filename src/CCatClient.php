@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Serializer;
  * @method \Albocode\CcatphpSdk\Endpoints\MemoryEndpoint memory()
  * @method \Albocode\CcatphpSdk\Endpoints\MessageEndpoint message()
  * @method \Albocode\CcatphpSdk\Endpoints\PluginsEndpoint plugins()
- * @method \Albocode\CcatphpSdk\Endpoints\PluginUploaderEndpoint pluginUploader()
+ * @method \Albocode\CcatphpSdk\Endpoints\PluginFileManagerEndpoint pluginFileManager()
  * @method \Albocode\CcatphpSdk\Endpoints\RabbitHoleEndpoint rabbitHole()
  * @method \Albocode\CcatphpSdk\Endpoints\SettingsEndpoint settings()
  * @method \Albocode\CcatphpSdk\Endpoints\UsersEndpoint users()

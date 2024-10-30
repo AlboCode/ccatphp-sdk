@@ -8,32 +8,32 @@ use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-class PluginUploaderEndpointTest extends TestCase
+class PluginFileManagerEndpointTest extends TestCase
 {
     use TestTrait;
 
     /**
      * @throws GuzzleException|\JsonException|Exception
      */
-    public function testGetPluginUploadersSettingsSuccess(): void
+    public function testGetPluginFileManagersSettingsSuccess(): void
     {
         $expected = [
             'settings' => [
                 [
-                    'name' => 'testPluginUploader',
+                    'name' => 'testPluginFileManager',
                     'value' => [
                         'property_first' => 'value_first',
                         'property_second' => 'value_second',
                     ],
                 ],
             ],
-            'selected_configuration' => 'testPluginUploader',
+            'selected_configuration' => 'testPluginFileManager',
         ];
 
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
-        $endpoint = $cCatClient->pluginUploader();
-        $result = $endpoint->getPluginUploadersSettings();
+        $endpoint = $cCatClient->pluginFileManager();
+        $result = $endpoint->getPluginFileManagersSettings();
 
         foreach ($expected['settings'] as $key => $setting) {
             self::assertEquals($setting['name'], $result->settings[$key]->name);
@@ -47,10 +47,10 @@ class PluginUploaderEndpointTest extends TestCase
     /**
      * @throws GuzzleException|\JsonException|Exception
      */
-    public function testGetPluginUploaderSettingsSuccess(): void
+    public function testGetPluginFileManagerSettingsSuccess(): void
     {
         $expected = [
-            'name' => 'testPluginUploader',
+            'name' => 'testPluginFileManager',
             'value' => [
                 'property_first' => 'value_first',
                 'property_second' => 'value_second',
@@ -63,8 +63,8 @@ class PluginUploaderEndpointTest extends TestCase
 
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
-        $endpoint = $cCatClient->pluginUploader();
-        $result = $endpoint->getPluginUploaderSettings('testPluginUploader');
+        $endpoint = $cCatClient->pluginFileManager();
+        $result = $endpoint->getPluginFileManagerSettings('testPluginFileManager');
 
         foreach ($expected as $property => $value) {
             /** @var array<string, string> $property */
@@ -82,10 +82,10 @@ class PluginUploaderEndpointTest extends TestCase
     /**
      * @throws GuzzleException|\JsonException|Exception
      */
-    public function testPutPluginUploaderSettingsSuccess(): void
+    public function testPutPluginFileManagerSettingsSuccess(): void
     {
         $expected = [
-            'name' => 'testPluginUploader',
+            'name' => 'testPluginFileManager',
             'value' => [
                 'property_first' => 'value_first',
                 'property_second' => 'value_second',
@@ -103,8 +103,8 @@ class PluginUploaderEndpointTest extends TestCase
             ->setCategory('testCategory')
             ->build();
 
-        $endpoint = $cCatClient->pluginUploader();
-        $result = $endpoint->putPluginUploaderSettings('testPluginUploader', $settingInput);
+        $endpoint = $cCatClient->pluginFileManager();
+        $result = $endpoint->putPluginFileManagerSettings('testPluginFileManager', $settingInput);
 
         foreach ($expected as $property => $value) {
             /** @var array<string, string> $property */
