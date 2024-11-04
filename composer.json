@@ -1,5 +1,5 @@
 {
-    "name": "albocode/ccatphp-sdk",
+    "name": "ai-blackbird/ccatphp-sdk",
     "description": "Cheshire Cat PHP Sdk",
     "type": "library",
     "require": {
@@ -11,11 +11,17 @@
     },
     "autoload": {
         "psr-4": {
-            "Albocode\\CcatphpSdk\\": "src/",
+            "Albocode\\CcatphpSdk\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Albocode\\CcatphpSdk\\Tests\\": "tests/"
         },
         "classmap": [
-            "src/",
             "tests/"
         ]
     },
