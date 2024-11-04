@@ -45,17 +45,19 @@ class AuthHandlerEndpoint extends AbstractEndpoint
      * This endpoint updates the settings of a specific authentication handler. It is used to update the settings of a
      * specific authentication handler that is available in the agent eventually specified by the agentId parameter.
      *
+     * @param array<string, mixed> $values
+     *
      * @throws GuzzleException
      */
     public function putAuthHandlerSettings(
         string $authHandler,
-        SettingInput $values,
+        array $values,
         ?string $agentId = null
     ): FactoryObjectSettingOutput {
         return $this->put(
             $this->formatUrl('/settings/' . $authHandler),
             FactoryObjectSettingOutput::class,
-            $values->toArray(),
+            $values,
             $agentId,
         );
     }

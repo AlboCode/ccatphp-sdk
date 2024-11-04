@@ -45,14 +45,16 @@ class EmbedderEndpoint extends AbstractEndpoint
      * This endpoint updates the settings of a specific embedder. Embedders are set to a system level, so usable by all
      * the agents in the system.
      *
+     * @param array<string, mixed> $values
+     *
      * @throws GuzzleException
      */
-    public function putEmbedderSettings(string $embedder, SettingInput $values): FactoryObjectSettingOutput
+    public function putEmbedderSettings(string $embedder, array $values): FactoryObjectSettingOutput
     {
         return $this->put(
             $this->formatUrl('/settings/' . $embedder),
             FactoryObjectSettingOutput::class,
-            $values->toArray(),
+            $values,
             $this->systemId,
         );
     }

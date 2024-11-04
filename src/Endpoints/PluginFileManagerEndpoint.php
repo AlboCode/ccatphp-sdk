@@ -45,16 +45,16 @@ class PluginFileManagerEndpoint extends AbstractEndpoint
      * This endpoint updates the settings of a specific Plugin file manager. Plugin file managers are set to a system
      * level, so usable by all the agents in the system.
      *
+     * @param array<string, mixed> $values
+     *
      * @throws GuzzleException
      */
-    public function putPluginFileManagerSettings(
-        string $pluginFileManager,
-        SettingInput $values
-    ): FactoryObjectSettingOutput {
+    public function putPluginFileManagerSettings(string $pluginFileManager, array $values): FactoryObjectSettingOutput
+    {
         return $this->put(
             $this->formatUrl('/settings/' . $pluginFileManager),
             FactoryObjectSettingOutput::class,
-            $values->toArray(),
+            $values,
             $this->systemId,
         );
     }

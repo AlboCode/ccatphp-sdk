@@ -2,7 +2,6 @@
 
 namespace Albocode\CcatphpSdk\Tests;
 
-use Albocode\CcatphpSdk\Builders\SettingInputBuilder;
 use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\MockObject\Exception;
@@ -25,6 +24,10 @@ class PluginFileManagerEndpointTest extends TestCase
                         'property_first' => 'value_first',
                         'property_second' => 'value_second',
                     ],
+                    'scheme' => [
+                        'property_first' => 'value_first',
+                        'property_second' => 'value_second',
+                    ],
                 ],
             ],
             'selected_configuration' => 'testPluginFileManager',
@@ -39,6 +42,9 @@ class PluginFileManagerEndpointTest extends TestCase
             self::assertEquals($setting['name'], $result->settings[$key]->name);
             foreach ($setting['value'] as $property => $value) {
                 self::assertEquals($value, $result->settings[$key]->value[$property]);
+            }
+            foreach ($setting['scheme'] as $property => $value) {
+                self::assertEquals($value, $result->settings[$key]->scheme[$property]);
             }
         }
         self::assertEquals($expected['selected_configuration'], $result->selectedConfiguration);
@@ -66,16 +72,12 @@ class PluginFileManagerEndpointTest extends TestCase
         $endpoint = $cCatClient->pluginFileManager();
         $result = $endpoint->getPluginFileManagerSettings('testPluginFileManager');
 
-        foreach ($expected as $property => $value) {
-            /** @var array<string, string> $property */
-            if (in_array($property, ['scheme', 'value'])) {
-                /** @var array<string, string> $value */
-                foreach ($value as $subProperty => $subValue) {
-                    self::assertEquals($subValue, $result->scheme[$subProperty]);
-                }
-            } else {
-                self::assertEquals($value, $result->$property);
-            }
+        self::assertEquals($expected['name'], $result->name);
+        foreach ($expected['value'] as $property => $value) {
+            self::assertEquals($value, $result->value[$property]);
+        }
+        foreach ($expected['scheme'] as $property => $value) {
+            self::assertEquals($value, $result->scheme[$property]);
         }
     }
 
@@ -90,32 +92,16 @@ class PluginFileManagerEndpointTest extends TestCase
                 'property_first' => 'value_first',
                 'property_second' => 'value_second',
             ],
-            'scheme' => [
-                'property_first' => 'value_first',
-                'property_second' => 'value_second',
-            ],
         ];
 
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
-        $settingInput = SettingInputBuilder::create()
-            ->setName($expected['name'])
-            ->setValue($expected['value'])
-            ->setCategory('testCategory')
-            ->build();
 
         $endpoint = $cCatClient->pluginFileManager();
-        $result = $endpoint->putPluginFileManagerSettings('testPluginFileManager', $settingInput);
+        $result = $endpoint->putPluginFileManagerSettings('testPluginFileManager', $expected['value']);
 
-        foreach ($expected as $property => $value) {
-            /** @var array<string, string> $property */
-            if (in_array($property, ['scheme', 'value'])) {
-                /** @var array<string, string> $value */
-                foreach ($value as $subProperty => $subValue) {
-                    self::assertEquals($subValue, $result->scheme[$subProperty]);
-                }
-            } else {
-                self::assertEquals($value, $result->$property);
-            }
+        self::assertEquals($expected['name'], $result->name);
+        foreach ($expected['value'] as $property => $value) {
+            self::assertEquals($value, $result->value[$property]);
         }
     }
 }

@@ -45,17 +45,19 @@ class LargeLanguageModelEndpoint extends AbstractEndpoint
      * This endpoint updates the settings of a specific large language model, either for the agent identified by the
      * agentId parameter (for multi-agent installations) or for the default agent (for single-agent installations).
      *
+     * @param array<string, mixed> $values
+     *
      * @throws GuzzleException
      */
     public function putLargeLanguageModelSettings(
         string $llm,
-        SettingInput $values,
+        array $values,
         ?string $agentId = null,
     ): FactoryObjectSettingOutput {
         return $this->put(
             $this->formatUrl('/settings/' . $llm),
             FactoryObjectSettingOutput::class,
-            $values->toArray(),
+            $values,
             $agentId,
         );
     }
