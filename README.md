@@ -38,7 +38,7 @@ $notificationClosure = function (string $message) {
 }
 
 // result is the result of the message
-$result = $cCatClient->sendMessage(
+$result = $cCatClient->message()->sendWebsocketMessage(
 new Message("Hello world!", 'user', []),  // message body
 $notificationClosure // websocket notification closure handle
 );
@@ -48,20 +48,20 @@ $notificationClosure // websocket notification closure handle
 Load data to the rabbit hole:
 ```php
 //file
-$promise = $this->client->rabbitHole($uploadedFile->getPathname(), null, null);
+$promise = $this->client->rabbitHole()->postFile($uploadedFile->getPathname(), null, null);
 $promise->wait();
 
 //url
-$promise = $this->client->rabbitHoleWeb($url, null,null);
+$promise = $this->client->rabbitHole()->postWeb($url, null,null);
 $promise->wait();
 ```
 
 Memory management utilities:
 
 ```php
-$this->client->getMemoryCollection(); // get number of vectors in the working memory
-$this->client->getMemoryRecall("HELLO"); // recall memories by text
+$this->client->memory()->getMemoryCollections(); // get number of vectors in the working memory
+$this->client->memory()->getMemoryRecall("HELLO"); // recall memories by text
 
 //delete memory points by metadata, like this example delete by source
-$this->client->deleteDeclarativeMemoryByMetadata(["source" => $url]);
+$this->client->memory()->deleteMemoryPointsByMetadata(Collection.Declarative, ["source" => $url]);
 ```
