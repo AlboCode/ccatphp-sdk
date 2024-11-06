@@ -9,11 +9,11 @@ use WebSocket\Middleware\PingResponder;
 
 class WSClient
 {
-    private string $host;
-    private ?int $port;
-    private ?string $apikey;
-    private ?string $token;
-    private bool $isWSS;
+    protected string $host;
+    protected ?int $port;
+    protected ?string $apikey;
+    protected ?string $token;
+    protected bool $isWSS;
 
     public function __construct(
         string $host,
@@ -44,18 +44,22 @@ class WSClient
         return $this->createWsClient($agentId);
     }
 
-    protected function createWsClient(?string $agentId = null): Client
+    public function getWsUri(?string $agentId = null): Uri
     {
         $path = sprintf('ws/%s', $agentId);
-        $path .= $this->apikey ? '?apikey=' . $this->apikey : '?token=' . $this->token;
+        $path .= $this->token ? '?token=' . $this->token : '?apikey=' . $this->apikey;
 
-        $wsUri = (new Uri())
+        return (new Uri())
             ->withScheme($this->isWSS ? 'wss' : 'ws')
             ->withHost($this->host)
             ->withPath($path)
             ->withPort($this->port)
         ;
-        $client = new Client($wsUri);
+    }
+
+    protected function createWsClient(?string $agentId = null): Client
+    {
+        $client = new Client($this->getWsUri($agentId));
         $client->setPersistent(true)
             ->setTimeout(100000)
             // Add CloseHandler middleware

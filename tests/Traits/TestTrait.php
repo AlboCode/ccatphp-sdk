@@ -3,9 +3,13 @@
 namespace Albocode\CcatphpSdk\Tests\Traits;
 
 use Albocode\CcatphpSdk\CCatClient;
+use Albocode\CcatphpSdk\Clients\HttpClient as BaseHttpClient;
 use Albocode\CcatphpSdk\Tests\Mocks\TestHttpClient;
 use Albocode\CcatphpSdk\Tests\Mocks\TestWsClient;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\Exception;
 use Psr\Http\Message\StreamInterface;
@@ -122,5 +126,27 @@ trait TestTrait
         $wsClientMock->method('receive')->willReturn($wsMessage);
 
         return $wsClientMock;
+    }
+
+    protected function getMockedGuzzleClientWithHandlerStack(array &$container): BaseHttpClient
+    {
+        $mock = new MockHandler([
+            new Response(200, [], '{}')
+        ]);
+
+        $client = new BaseHttpClient('example.com', null, $this->apikey);
+        $reflection = new \ReflectionClass($client);
+        $middlewares = $reflection->getProperty('middlewares')->getValue($client);
+
+        $newHandler = new HandlerStack($mock);
+        foreach ($middlewares as $name => $middleware) {
+            $newHandler->push($middleware, $name);
+        }
+        $newHandler->push(Middleware::history($container));
+        $newGuzzleClient = $client->createHttpClient($newHandler);
+
+        $reflection->getProperty('httpClient')->setValue($client, $newGuzzleClient);
+
+        return $client;
     }
 }

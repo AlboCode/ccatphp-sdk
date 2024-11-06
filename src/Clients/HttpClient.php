@@ -10,12 +10,15 @@ use Psr\Http\Message\RequestInterface;
 
 class HttpClient
 {
-    private Client $httpClient;
-    private Uri $httpUri;
-    private ?string $apikey;
-    private ?string $token;
-    private ?string $userId = null;
-    private ?string $agentId = null;
+    protected Client $httpClient;
+    protected Uri $httpUri;
+    protected ?string $apikey;
+    protected ?string $token;
+    protected ?string $userId = null;
+    protected ?string $agentId = null;
+
+    /** @var array<string, callable> */
+    protected array $middlewares;
 
     public function __construct(
         string $host,
@@ -23,9 +26,18 @@ class HttpClient
         ?string $apikey = null,
         ?bool $isHTTPs = false
     ) {
+        $this->apikey = $apikey;
+        $this->token = null;
+
+        $this->middlewares = [
+            'beforeSecureRequest' => Middleware::tap($this->beforeSecureRequest()),
+            'beforeJwtRequest' => Middleware::tap($this->beforeJwtRequest()),
+        ];
+
         $handlerStack = HandlerStack::create();
-        $handlerStack->push(Middleware::tap($this->beforeSecureRequest()));
-        $handlerStack->push(Middleware::tap($this->beforeJwtRequest()));
+        foreach ($this->middlewares as $name => $middleware) {
+            $handlerStack->push($middleware, $name);
+        }
 
         $this->httpUri = (new Uri())
             ->withHost($host)
@@ -33,9 +45,6 @@ class HttpClient
             ->withScheme($isHTTPs ? 'https' : 'http');
 
         $this->httpClient = $this->createHttpClient($handlerStack);
-
-        $this->apikey = $apikey;
-        $this->token = null;
     }
 
     public function createHttpClient(?HandlerStack $handlerStack = null): Client
@@ -63,6 +72,7 @@ class HttpClient
         }
 
         $this->agentId = $agentId ?? 'agent';
+        $this->userId = $userId ?? 'user';
 
         return $this->httpClient;
     }
@@ -76,7 +86,7 @@ class HttpClient
     {
         return function (RequestInterface &$request, array $requestOptions) {
             if (!empty($this->apikey)) {
-                $request = $request->withHeader('Authorization', 'Bearer' . $this->apikey);
+                $request = $request->withHeader('Authorization', 'Bearer ' . $this->apikey);
             }
             if (!empty($this->userId)) {
                 $request = $request->withHeader('user_id', $this->userId);
