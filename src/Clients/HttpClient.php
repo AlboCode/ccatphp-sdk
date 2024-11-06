@@ -72,7 +72,7 @@ class HttpClient
         }
 
         $this->agentId = $agentId ?? 'agent';
-        $this->userId = $userId ?? 'user';
+        $this->userId = $userId;
 
         return $this->httpClient;
     }
