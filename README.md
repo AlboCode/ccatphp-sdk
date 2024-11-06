@@ -3,7 +3,7 @@
 ----
 
 **CCat PHP SDK (Cheshire cat PHP SDK)** is a library to help the implementation
-of [Cheshire Cat](https://github.com/cheshire-cat-ai/core) on a PHP Project
+of [Cheshire Cat](https://github.com/ai-blackbird/cheshirecat-core) on a PHP Project
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -12,9 +12,20 @@ of [Cheshire Cat](https://github.com/cheshire-cat-ai/core) on a PHP Project
 
 To install CCatPHP-SDK you can run this command:
 ```cmd
-composer require albocode/ccatphp-sdk
+composer require ai-blackbird/ccatphp-sdk
 ```
 
+Perhaps, you also need to add the following repositories to your composer.json file:
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/AI-Blackbird/ccatphp-sdk"
+        }
+    ]
+}
+```
 
 ## Usage
 Initialization and usage:
