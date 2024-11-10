@@ -196,6 +196,32 @@ class MemoryEndpointTest extends BaseTest
     /**
      * @throws GuzzleException|Exception|\JsonException
      */
+    public function testPutMemoryPointSuccess(): void
+    {
+        $expected = [
+            'content' => 'test',
+            'metadata' => [],
+            'id' => 'test_test_test',
+            'vector' => [],
+        ];
+
+        $cCatClient = $this->getCCatClient($this->apikey, $expected);
+
+        $endpoint = $cCatClient->memory();
+
+        $memoryPoint = MemoryPointBuilder::create()
+            ->setContent($expected['content'])
+            ->setMetadata($expected['metadata'])
+            ->build();
+        $result = $endpoint->putMemoryPoint(Collection::Declarative, $memoryPoint, $expected['id']);
+
+        self::assertEquals($expected['id'], $result->id);
+        self::assertEquals($expected['vector'], $result->vector);
+    }
+
+    /**
+     * @throws GuzzleException|Exception|\JsonException
+     */
     public function testDeleteMemoryPointSuccess(): void
     {
         $expected = [

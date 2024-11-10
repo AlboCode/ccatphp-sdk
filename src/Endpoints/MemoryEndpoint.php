@@ -203,6 +203,34 @@ class MemoryEndpoint extends AbstractEndpoint
     }
 
     /**
+     * This method puts a memory point, either for the agent identified by the agentId parameter (for multi-agent
+     * installations) or for the default agent (for single-agent installations).
+     * If the userId parameter is provided, the memory point is associated with the user ID.
+     *
+     * @throws GuzzleException
+     */
+    public function putMemoryPoint(
+        Collection $collection,
+        MemoryPoint $memoryPoint,
+        string $pointId,
+        ?string $agentId = null,
+        ?string $userId = null,
+    ): MemoryPointOutput {
+        if ($userId && empty($memoryPoint->metadata["source"])) {
+            $memoryPoint->metadata = !empty($memoryPoint->metadata)
+                ? $memoryPoint->metadata + ["source" => $userId]
+                : ["source" => $userId];
+        }
+
+        return $this->put(
+            $this->formatUrl('/collections/' . $collection->value . '/points' . $pointId),
+            MemoryPointOutput::class,
+            $memoryPoint->toArray(),
+            $agentId,
+        );
+    }
+
+    /**
      * This endpoint retrieves a memory point, either for the agent identified by the agentId parameter (for multi-agent
      * installations) or for the default agent (for single-agent installations).
      *
