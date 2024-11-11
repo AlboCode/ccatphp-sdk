@@ -34,9 +34,9 @@ abstract class AbstractEndpoint
         return $this->client->getHttpClient()->getClient($agentId, $userId);
     }
 
-    protected function getWsClient(?string $agentId = null): WebSocketClient
+    protected function getWsClient(?string $agentId = null, ?string $userId = null): WebSocketClient
     {
-        return $this->client->getWsClient()->getClient($agentId);
+        return $this->client->getWsClient()->getClient($agentId, $userId);
     }
 
     /**

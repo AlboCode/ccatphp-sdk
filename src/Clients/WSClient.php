@@ -35,19 +35,22 @@ class WSClient
         return $this;
     }
 
-    public function getClient(?string $agentId = null): Client
+    public function getClient(?string $agentId = null, ?string $userId = null): Client
     {
         if (!$this->apikey && !$this->token) {
             throw new \InvalidArgumentException('You must provide an apikey or a token');
         }
 
-        return $this->createWsClient($agentId);
+        return $this->createWsClient($agentId, $userId);
     }
 
-    public function getWsUri(?string $agentId = null): Uri
+    public function getWsUri(?string $agentId = null, ?string $userId = null): Uri
     {
         $path = sprintf('ws/%s', $agentId);
         $path .= $this->token ? '?token=' . $this->token : '?apikey=' . $this->apikey;
+        if ($userId) {
+            $path .= '&user_id=' . $userId;
+        }
 
         return (new Uri())
             ->withScheme($this->isWSS ? 'wss' : 'ws')
@@ -57,9 +60,9 @@ class WSClient
         ;
     }
 
-    protected function createWsClient(?string $agentId = null): Client
+    protected function createWsClient(?string $agentId = null, ?string $userId = null): Client
     {
-        $client = new Client($this->getWsUri($agentId));
+        $client = new Client($this->getWsUri($agentId, $userId));
         $client->setPersistent(true)
             ->setTimeout(100000)
             // Add CloseHandler middleware

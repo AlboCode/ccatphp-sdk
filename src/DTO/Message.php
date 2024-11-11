@@ -5,23 +5,37 @@ namespace Albocode\CcatphpSdk\DTO;
 class Message
 {
     public string $text;
-    public string $userId = 'user';
-    public string $agentId = 'agent';
+
+    /** @var string[]|null  */
+    public ?array $images = [];
+
+    /** @var string[]|null  */
+    public ?array $audio = [];
 
     /**
-     * @var array<string, mixed>
+     * @param string[]|null $images
+     * @param string[]|null $audio
      */
-    public array $promptSettings = [];
-
-    /**
-     * @param array<string, mixed> $promptSettings
-     */
-    public function __construct(
-        string $text, string $userId = 'user', string $agentId = 'agent', array $promptSettings = []
-    ) {
+    public function __construct(string $text, ?array $images = null, ?array $audio = null)
+    {
         $this->text = $text;
-        $this->userId = $userId;
-        $this->agentId = $agentId;
-        $this->promptSettings = $promptSettings;
+        $this->images = $images;
+        $this->audio = $audio;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        $result = ['text' => $this->text];
+        if ($this->images) {
+            $result['images'] = $this->images;
+        }
+        if ($this->audio) {
+            $result['audio'] = $this->audio;
+        }
+
+        return $result;
     }
 }

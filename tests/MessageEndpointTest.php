@@ -37,7 +37,7 @@ class MessageEndpointTest extends TestCase
 
         $endpoint = $cCatClient->message();
         $response = $endpoint->sendHttpMessage(
-            new Message($expected['content'], $expected['user_id'], $expected['agent_id'])
+            new Message($expected['content']), $expected['agent_id'], $expected['user_id']
         );
 
         self::assertInstanceOf(Response::class, $response);
@@ -76,7 +76,7 @@ class MessageEndpointTest extends TestCase
 
         $endpoint = $cCatClient->message();
         $response = $endpoint->sendWebsocketMessage(
-            new Message($expected['content'], $expected['user_id'], $expected['agent_id'])
+            new Message($expected['content']), $expected['agent_id'], $expected['user_id']
         );
 
         self::assertInstanceOf(Response::class, $response);

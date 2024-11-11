@@ -4,7 +4,6 @@ namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Factory\FactoryObjectSettingOutput;
 use Albocode\CcatphpSdk\DTO\Api\Factory\FactoryObjectSettingsOutput;
-use Albocode\CcatphpSdk\DTO\SettingInput;
 use GuzzleHttp\Exception\GuzzleException;
 
 class LargeLanguageModelEndpoint extends AbstractEndpoint
