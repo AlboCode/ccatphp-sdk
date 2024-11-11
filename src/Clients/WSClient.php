@@ -46,16 +46,22 @@ class WSClient
 
     public function getWsUri(?string $agentId = null, ?string $userId = null): Uri
     {
-        $path = sprintf('ws/%s', $agentId);
-        $path .= $this->token ? '?token=' . $this->token : '?apikey=' . $this->apikey;
+        $query = [];
+        if ($this->token) {
+            $query['token'] = $this->token;
+        } else {
+            $query['apikey'] = $this->apikey;
+        }
+
         if ($userId) {
-            $path .= '&user_id=' . $userId;
+            $query['userId'] = $userId;
         }
 
         return (new Uri())
             ->withScheme($this->isWSS ? 'wss' : 'ws')
             ->withHost($this->host)
-            ->withPath($path)
+            ->withPath(sprintf('ws/%s', $agentId))
+            ->withQueryItems($query)
             ->withPort($this->port)
         ;
     }
