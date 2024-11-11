@@ -7,20 +7,31 @@ class Message
     public string $text;
 
     /** @var string[]|null  */
-    public ?array $images = [];
+    public ?array $images;
 
     /** @var string[]|null  */
-    public ?array $audio = [];
+    public ?array $audio;
+
+    /**
+     * @var array<string, mixed>|null
+     */
+    public ?array $additionalFields;
 
     /**
      * @param string[]|null $images
      * @param string[]|null $audio
+     * @param array<string, mixed>|null $additionalFields
      */
-    public function __construct(string $text, ?array $images = null, ?array $audio = null)
-    {
+    public function __construct(
+        string $text,
+        ?array $images = null,
+        ?array $audio = null,
+        ?array $additionalFields = null
+    ) {
         $this->text = $text;
         $this->images = $images;
         $this->audio = $audio;
+        $this->additionalFields = $additionalFields;
     }
 
     /**
@@ -28,12 +39,14 @@ class Message
      */
     public function toArray(): array
     {
-        $result = ['text' => $this->text];
-        if ($this->images) {
-            $result['images'] = $this->images;
-        }
-        if ($this->audio) {
-            $result['audio'] = $this->audio;
+        $result = [
+            'text' => $this->text,
+            'images' => $this->images,
+            'audio' => $this->audio,
+        ];
+
+        if ($this->additionalFields !== null) {
+            $result = array_merge($result, $this->additionalFields);
         }
 
         return $result;
