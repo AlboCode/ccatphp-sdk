@@ -2,16 +2,8 @@
 
 namespace Albocode\CcatphpSdk\DTO;
 
-class Message
+class Message extends MessageBase
 {
-    public string $text;
-
-    /** @var string[]|null  */
-    public ?array $images;
-
-    /** @var string[]|null  */
-    public ?array $audio;
-
     /**
      * @var array<string, mixed>|null
      */

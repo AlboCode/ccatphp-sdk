@@ -2,8 +2,8 @@
 
 namespace Albocode\CcatphpSdk\Tests;
 
+use Albocode\CcatphpSdk\DTO\Api\Message\MessageOutput;
 use Albocode\CcatphpSdk\DTO\Message;
-use Albocode\CcatphpSdk\DTO\Response;
 use Albocode\CcatphpSdk\Tests\Traits\TestTrait;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\MockObject\Exception;
@@ -19,10 +19,8 @@ class MessageEndpointTest extends TestCase
     public function testSendHttpMessage(): void
     {
         $expected = [
-            'content' => 'Hello World',
+            'text' => 'Hello World',
             'type' => 'chat',
-            'user_id' => 'userID',
-            'agent_id' => 'agentID',
             'why' => [
                 'input' => 'input',
                 'memory' => [
@@ -37,15 +35,13 @@ class MessageEndpointTest extends TestCase
 
         $endpoint = $cCatClient->message();
         $response = $endpoint->sendHttpMessage(
-            new Message($expected['content']), $expected['agent_id'], $expected['user_id']
+            new Message($expected['text']), 'agent_id', 'user_id'
         );
 
-        self::assertInstanceOf(Response::class, $response);
+        self::assertInstanceOf(MessageOutput::class, $response);
 
-        self::assertEquals($response->content, $expected['content']);
+        self::assertEquals($response->text, $expected['text']);
         self::assertEquals($response->type, $expected['type']);
-        self::assertEquals($response->userId, $expected['user_id']);
-        self::assertEquals($response->agentId, $expected['agent_id']);
         self::assertEquals($response->why->input, $expected['why']['input']);
         self::assertEquals($response->why->memory->episodic, $expected['why']['memory']['episodic']);
         self::assertEquals($response->why->memory->declarative, $expected['why']['memory']['declarative']);
@@ -58,10 +54,8 @@ class MessageEndpointTest extends TestCase
     public function testSendWebsocketMessage(): void
     {
         $expected = [
-            'content' => 'Hello World',
+            'text' => 'Hello World',
             'type' => 'chat',
-            'user_id' => 'userID',
-            'agent_id' => 'agentID',
             'why' => [
                 'input' => 'input',
                 'memory' => [
@@ -76,15 +70,13 @@ class MessageEndpointTest extends TestCase
 
         $endpoint = $cCatClient->message();
         $response = $endpoint->sendWebsocketMessage(
-            new Message($expected['content']), $expected['agent_id'], $expected['user_id']
+            new Message($expected['text']), 'agent_id', 'user_id'
         );
 
-        self::assertInstanceOf(Response::class, $response);
+        self::assertInstanceOf(MessageOutput::class, $response);
 
-        self::assertEquals($response->content, $expected['content']);
+        self::assertEquals($response->text, $expected['text']);
         self::assertEquals($response->type, $expected['type']);
-        self::assertEquals($response->userId, $expected['user_id']);
-        self::assertEquals($response->agentId, $expected['agent_id']);
         self::assertEquals($response->why->input, $expected['why']['input']);
         self::assertEquals($response->why->memory->episodic, $expected['why']['memory']['episodic']);
         self::assertEquals($response->why->memory->declarative, $expected['why']['memory']['declarative']);

@@ -3,13 +3,8 @@
 namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\CCatClient;
-use Albocode\CcatphpSdk\DTO\Memory;
-use Albocode\CcatphpSdk\DTO\Response;
-use Albocode\CcatphpSdk\DTO\Why;
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use RuntimeException;
 use WebSocket\Client as WebSocketClient;
 
 abstract class AbstractEndpoint
@@ -153,38 +148,5 @@ abstract class AbstractEndpoint
         $response = $this->getHttpClient($agentId, $userId)->delete($endpoint, $options);
 
         return $this->deserialize($response->getBody()->getContents(), $outputClass);
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function jsonToResponse(string $jsonResponse): Response
-    {
-        $response = new Response();
-
-        $responseArray = json_decode($jsonResponse, true, 512, JSON_THROW_ON_ERROR);
-        if ($responseArray['type'] === 'error') {
-            throw new RuntimeException($responseArray['description']);
-        }
-
-        $response->content = $responseArray['content'];
-        $response->type = $responseArray['type'];
-        $response->userId = $responseArray['user_id'];
-        $response->agentId = $responseArray['agent_id'];
-
-        $why = new Why();
-        $why->input = $responseArray['why']['input'];
-        $why->intermediateSteps = $responseArray['why']['intermediate_steps'] ?? [];
-        $why->modelInteractions = $responseArray['why']['model_interactions'] ?? [];
-
-        $memory = new Memory();
-        $memory->declarative = $responseArray['why']['memory']['declarative'] ?? [];
-        $memory->episodic = $responseArray['why']['memory']['episodic'] ?? [];
-        $memory->procedural = $responseArray['why']['memory']['procedural'] ?? [];
-
-        $why->memory = $memory;
-        $response->why = $why;
-
-        return $response;
     }
 }

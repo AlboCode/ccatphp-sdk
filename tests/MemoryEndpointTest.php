@@ -86,35 +86,17 @@ class MemoryEndpointTest extends BaseTest
             'history' => [
                 [
                     'who' => 'Human',
-                    'message' => 'Hey you!',
-                    'why' => [
-                        'input' => 'input',
-                        'memory' => [
-                            'episodic' => [],
-                            'declarative' => [],
-                            'procedural' => [],
-                        ],
-                        'intermediate_steps' => [],
-                        'model_interactions' => [],
-                    ],
                     'when' => 0.0,
-                    'role' => 'Human',
+                    'content' => [
+                        'text' => 'Hey you!',
+                    ],
                 ],
                 [
                     'who' => 'AI',
-                    'message' => 'Hi!',
-                    'why' => [
-                        'input' => 'input',
-                        'memory' => [
-                            'episodic' => [],
-                            'declarative' => [],
-                            'procedural' => [],
-                        ],
-                        'intermediate_steps' => [],
-                        'model_interactions' => [],
-                    ],
                     'when' => 0.1,
-                    'role' => 'AI',
+                    'content' => [
+                        'text' => 'Hi!',
+                    ],
                 ],
             ],
         ];

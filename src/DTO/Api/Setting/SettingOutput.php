@@ -13,5 +13,5 @@ class SettingOutput
 
     public string $settingId;
 
-    public int $updatedAt;
+    public int|string $updatedAt;
 }

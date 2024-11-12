@@ -2,11 +2,11 @@
 
 namespace Albocode\CcatphpSdk\DTO\Api\Memory;
 
-use Albocode\CcatphpSdk\DTO\ConversationHistoryInfo;
+use Albocode\CcatphpSdk\DTO\Api\Memory\Nested\ConversationHistoryItem;
 
 class ConversationHistoryOutput
 {
-    /** @var ConversationHistoryInfo[] */
+    /** @var ConversationHistoryItem[] */
     public array $history;
 
     /**

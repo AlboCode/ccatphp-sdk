@@ -7,6 +7,7 @@ use Albocode\CcatphpSdk\Clients\WSClient;
 use Albocode\CcatphpSdk\Endpoints\AbstractEndpoint;
 use Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
@@ -44,19 +45,23 @@ class CCatClient
         }
 
         $phpDocExtractor = new PhpDocExtractor();
-        $typeExtractor = new PropertyInfoExtractor(
-            typeExtractors: [ new ConstructorExtractor([$phpDocExtractor]), $phpDocExtractor,]
-        );
-        $normalizer = new ObjectNormalizer(
+        $reflectionExtractor = new ReflectionExtractor();
+        $typeExtractor = new PropertyInfoExtractor(typeExtractors: [
+            new ConstructorExtractor([$phpDocExtractor, $reflectionExtractor]),
+            $phpDocExtractor,
+            $reflectionExtractor
+        ]);
+
+        $objectNormalizer = new ObjectNormalizer(
             null,
             new CamelCaseToSnakeCaseNameConverter(),
             null,
-            propertyTypeExtractor: $typeExtractor
+            propertyTypeExtractor: $typeExtractor,
         );
 
         $encoder = new JsonEncoder();
 
-        $this->serializer = new Serializer([$normalizer, new ArrayDenormalizer()], [$encoder]);
+        $this->serializer = new Serializer([$objectNormalizer, new ArrayDenormalizer()], [$encoder]);
     }
 
     public function addToken(string $token): self

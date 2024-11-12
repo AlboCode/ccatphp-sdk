@@ -54,7 +54,7 @@ class WSClient
         }
 
         if ($userId) {
-            $query['userId'] = $userId;
+            $query['user_id'] = $userId;
         }
 
         return (new Uri())

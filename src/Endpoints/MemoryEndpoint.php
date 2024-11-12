@@ -2,8 +2,8 @@
 
 namespace Albocode\CcatphpSdk\Endpoints;
 
-use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsDestroyOutput;
+use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\ConversationHistoryDeleteOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\ConversationHistoryOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointDeleteOutput;
@@ -11,10 +11,7 @@ use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointsDeleteByMetadataOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryRecallOutput;
-use Albocode\CcatphpSdk\DTO\ConversationHistoryInfo;
-use Albocode\CcatphpSdk\DTO\Memory;
 use Albocode\CcatphpSdk\DTO\MemoryPoint;
-use Albocode\CcatphpSdk\DTO\Why;
 use Albocode\CcatphpSdk\Enum\Collection;
 use GuzzleHttp\Exception\GuzzleException;
 use RuntimeException;
@@ -83,45 +80,12 @@ class MemoryEndpoint extends AbstractEndpoint
      */
     public function getConversationHistory(?string $agentId = null, ?string $userId = null): ConversationHistoryOutput
     {
-        $httpClient = $this->getHttpClient($agentId, $userId);
-        $jsonResponse = $httpClient->get($this->formatUrl('/conversation_history'))
-            ->getBody()
-            ->getContents();
-
-        $responseArray = json_decode($jsonResponse, true, 512, JSON_THROW_ON_ERROR);
-
-        $result = new ConversationHistoryOutput();
-
-        $conversationHistory = [];
-        foreach ($responseArray['history'] as $history) {
-            $historyItem = new ConversationHistoryInfo();
-            $historyItem->who = $history['who'];
-            $historyItem->message = $history['message'];
-            $historyItem->when = $history['when'];
-            $historyItem->role = $history['role'];
-
-            if (!empty($historyWhy = $history['why'])) {
-                $historyItemWhy = new Why();
-
-                $historyItemWhy->input = $historyWhy['input'];
-                $historyItemWhy->intermediateSteps = $historyWhy['intermediate_steps'] ?? [];
-                $historyItemWhy->modelInteractions = $historyWhy['model_interactions'] ?? [];
-
-                $historyItemWhyMemory = new Memory();
-                $historyItemWhyMemory->declarative = $historyWhy['memory']['declarative'] ?? [];
-                $historyItemWhyMemory->episodic = $historyWhy['memory']['episodic'] ?? [];
-                $historyItemWhyMemory->procedural = $historyWhy['memory']['procedural'] ?? [];
-
-                $historyItemWhy->memory = $historyItemWhyMemory;
-
-                $historyItem->why = $historyItemWhy;
-            }
-
-            $conversationHistory[] = $historyItem;
-        }
-
-        $result->history = $conversationHistory;
-        return $result;
+        return $this->get(
+            $this->formatUrl('/conversation_history'),
+            ConversationHistoryOutput::class,
+            $agentId,
+            $userId,
+        );
     }
 
     /**

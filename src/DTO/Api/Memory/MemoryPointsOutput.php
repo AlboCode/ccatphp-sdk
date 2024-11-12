@@ -9,6 +9,5 @@ class MemoryPointsOutput
     /** @var Record[] */
     public array $points;
 
-    public ?string $nextOffset;
-
+    public string|int|null $nextOffset = null;
 }

@@ -2,12 +2,12 @@
 
 namespace Albocode\CcatphpSdk\Endpoints;
 
+use Albocode\CcatphpSdk\DTO\Api\Message\MessageOutput;
+use Albocode\CcatphpSdk\DTO\Message;
 use Closure;
 use Exception;
-use RuntimeException;
-use Albocode\CcatphpSdk\DTO\Message;
-use Albocode\CcatphpSdk\DTO\Response;
 use GuzzleHttp\Exception\GuzzleException;
+use RuntimeException;
 
 class MessageEndpoint extends AbstractEndpoint
 {
@@ -16,12 +16,15 @@ class MessageEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException|\Exception
      */
-    public function sendHttpMessage(Message $message, ?string $agentId = null, ?string $userId = null): Response
+    public function sendHttpMessage(Message $message, ?string $agentId = null, ?string $userId = null): MessageOutput
     {
-        $httpClient = $this->getHttpClient($agentId, $userId);
-        $response = $httpClient->post('/message', ['json' => $message->toArray()]);
-
-        return $this->jsonToResponse($response->getBody()->getContents());
+        return $this->postJson(
+            '/message',
+            MessageOutput::class,
+            $message->toArray(),
+            $agentId,
+            $userId,
+        );
     }
 
     /**
@@ -34,7 +37,7 @@ class MessageEndpoint extends AbstractEndpoint
         ?string $agentId = null,
         ?string $userId = null,
         ?Closure $closure = null
-    ): Response {
+    ): MessageOutput {
         $client = $this->getWsClient($agentId, $userId);
         $json = json_encode($message->toArray(), JSON_THROW_ON_ERROR);
         if (!$json) {
@@ -58,6 +61,6 @@ class MessageEndpoint extends AbstractEndpoint
 
         $client->disconnect();
 
-        return $this->jsonToResponse($content);
+        return $this->deserialize($content, MessageOutput::class);
     }
 }
