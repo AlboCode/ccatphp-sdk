@@ -41,6 +41,7 @@ class MessageEndpointTest extends TestCase
         self::assertInstanceOf(MessageOutput::class, $response);
 
         self::assertEquals($response->text, $expected['text']);
+        self::assertEquals($response->content, $expected['text']);
         self::assertEquals($response->type, $expected['type']);
         self::assertEquals($response->why->input, $expected['why']['input']);
         self::assertEquals($response->why->memory->episodic, $expected['why']['memory']['episodic']);

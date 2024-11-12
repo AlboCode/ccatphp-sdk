@@ -11,6 +11,24 @@ class MessageOutput extends MessageBase
 
     public Why $why;
 
+    /** @deprecated */
+    public readonly string $content;
+
+    /**
+     * @param string $text
+     * @param array<int, string>|null $images
+     * @param array<int, string>|null $audio
+     */
+    public function __construct(public string $text = '', public ?array $images = null, public ?array $audio = null)
+    {
+        $this->content = $text;
+    }
+
+    public function getContent(): string
+    {
+        return $this->text;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -20,6 +38,7 @@ class MessageOutput extends MessageBase
 
         $data['type'] = $this->type;
         $data['why'] = $this->why->toArray();
+        $data['content'] = $this->text;
 
         return $data;
     }
