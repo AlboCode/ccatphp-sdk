@@ -23,17 +23,7 @@ class ConversationHistoryItemContent extends MessageBase
      */
     public function toArray(): array
     {
-        $data = [
-            'text' => $this->text,
-        ];
-
-        if ($this->images) {
-            $data['images'] = $this->images;
-        }
-
-        if ($this->audio) {
-            $data['audio'] = $this->audio;
-        }
+        $data = parent::toArray();
 
         if ($this->why !== null) {
             $data['why'] = $this->why->toArray();

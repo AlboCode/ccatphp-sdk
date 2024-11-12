@@ -10,4 +10,17 @@ class MessageOutput extends MessageBase
     public ?string $type = 'chat';
 
     public Why $why;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        $data = parent::toArray();
+
+        $data['type'] = $this->type;
+        $data['why'] = $this->why->toArray();
+
+        return $data;
+    }
 }

@@ -89,6 +89,8 @@ class MemoryEndpointTest extends BaseTest
                     'when' => 0.0,
                     'content' => [
                         'text' => 'Hey you!',
+                        'images' => [],
+                        'audio' => [],
                     ],
                 ],
                 [
@@ -96,6 +98,8 @@ class MemoryEndpointTest extends BaseTest
                     'when' => 0.1,
                     'content' => [
                         'text' => 'Hi!',
+                        'images' => [],
+                        'audio' => [],
                     ],
                 ],
             ],
