@@ -91,6 +91,55 @@ class PluginsEndpointTest extends TestCase
     /**
      * @throws GuzzleException|Exception|\JsonException
      */
+    public function testGetFilteredAvailablePluginsSuccess(): void
+    {
+        $expected = [
+            'filters' => [
+                'query' => 'Plugin 1',
+            ],
+            'installed' => [
+                [
+                    'id' => '1',
+                    'name' => 'Plugin 1',
+                    'description' => 'Description 1',
+                    'author_name' => 'Author 1',
+                    'author_url' => 'https://author1.com',
+                    'plugin_url' => 'https://plugin1.com',
+                    'tags' => 'tag1, tag2',
+                    'thumb' => 'https://thumb1.com',
+                    'version' => '1.0.0',
+                    'active' => true,
+                    'hooks' => [],
+                    'tools' => []
+                ],
+            ],
+            'registry' => [
+                [
+                    'id' => '1',
+                    'name' => 'Plugin 1',
+                    'description' => 'Description 1',
+                    'author_name' => 'Author 1',
+                    'author_url' => 'https://author1.com',
+                    'plugin_url' => 'https://plugin1.com',
+                    'tags' => 'tag1, tag2',
+                    'thumb' => 'https://thumb1.com',
+                    'version' => '1.0.0',
+                    'url' => 'https://plugin1.com',
+                ],
+            ]
+        ];
+
+        $cCatClient = $this->getCCatClient($this->apikey, $expected);
+
+        $endpoint = $cCatClient->plugins();
+        $result = $endpoint->getAvailablePlugins('Plugin 1');
+
+        self::assertEquals($expected, $result->toArray());
+    }
+
+    /**
+     * @throws GuzzleException|Exception|\JsonException
+     */
     public function testTogglePluginSuccess(): void
     {
         $pluginId = 'plugin_1';

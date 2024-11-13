@@ -18,8 +18,13 @@ class PluginsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function getAvailablePlugins(?string $query = null, ?string $agentId = null): PluginCollectionOutput
+    public function getAvailablePlugins(?string $pluginName = null, ?string $agentId = null): PluginCollectionOutput
     {
+        $query = null;
+        if ($pluginName) {
+            $query = ['query' => $pluginName];
+        }
+
         return $this->get(
             $this->prefix,
             PluginCollectionOutput::class,
