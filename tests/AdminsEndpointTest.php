@@ -173,6 +173,7 @@ class AdminsEndpointTest extends TestCase
         $expected = [
             'deleted_settings' => true,
             'deleted_memories' => true,
+            'deleted_plugin_folders' => true,
         ];
 
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
@@ -182,6 +183,7 @@ class AdminsEndpointTest extends TestCase
 
         self::assertTrue($result->deletedSettings);
         self::assertTrue($result->deletedMemories);
+        self::assertTrue($result->deletedPluginFolders);
     }
 
     /**
