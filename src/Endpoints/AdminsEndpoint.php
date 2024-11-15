@@ -166,13 +166,13 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function agentReset(): ResetOutput
+    public function agentReset(?string $agentId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/agent_reset/'),
             ResetOutput::class,
             [],
-            $this->systemId,
+            $agentId,
         );
     }
 
@@ -181,13 +181,13 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function agentDestroy(): ResetOutput
+    public function agentDestroy(?string $agentId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/agent_destroy/'),
             ResetOutput::class,
             [],
-            $this->systemId,
+            $agentId,
         );
     }
 
