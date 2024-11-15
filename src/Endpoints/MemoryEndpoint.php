@@ -2,7 +2,7 @@
 
 namespace Albocode\CcatphpSdk\Endpoints;
 
-use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsDestroyOutput;
+use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionPointsDestroyOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\CollectionsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\ConversationHistoryDeleteOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\ConversationHistoryOutput;
@@ -38,31 +38,33 @@ class MemoryEndpoint extends AbstractEndpoint
     }
 
     /**
-     * This endpoint deletes the collections of memory points, either for the agent identified by the agentId parameter
-     * (for multi-agent installations) or for the default agent (for single-agent installations).
+     * This endpoint deletes the all the points in all the collections of memory, either for the agent identified by
+     * the agentId parameter (for multi-agent installations) or for the default agent (for single-agent installations).
      *
      * @throws GuzzleException
      */
-    public function deleteMemoryCollections(?string $agentId = null): CollectionsDestroyOutput
+    public function deleteAllMemoryCollectionPoints(?string $agentId = null): CollectionPointsDestroyOutput
     {
         return $this->delete(
             $this->formatUrl('/collections'),
-            CollectionsDestroyOutput::class,
+            CollectionPointsDestroyOutput::class,
             $agentId,
         );
     }
 
     /**
-     * This method deletes a collection of memory points, either for the agent identified by the agentId parameter
-     * (for multi-agent installations) or for the default agent (for single-agent installations).
+     * This method deletes all the points in a single collection of memory, either for the agent identified by the
+     * agentId parameter (for multi-agent installations) or for the default agent (for single-agent installations).
      *
      * @throws GuzzleException
      */
-    public function deleteMemoryCollection(Collection $collection, ?string $agentId = null): CollectionsDestroyOutput
-    {
+    public function deleteAllSingleMemoryCollectionPoints(
+        Collection $collection,
+        ?string $agentId = null
+    ): CollectionPointsDestroyOutput {
         return $this->delete(
             $this->formatUrl('/collections/' . $collection->value),
-            CollectionsDestroyOutput::class,
+            CollectionPointsDestroyOutput::class,
             $agentId,
         );
     }

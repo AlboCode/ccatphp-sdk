@@ -51,7 +51,7 @@ class MemoryEndpointTest extends BaseTest
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->memory();
-        $result = $endpoint->deleteMemoryCollections();
+        $result = $endpoint->deleteAllMemoryCollectionPoints();
 
         foreach ($expected['deleted'] as $key => $value) {
             self::assertEquals($value, $result->deleted[$key]);
@@ -72,7 +72,7 @@ class MemoryEndpointTest extends BaseTest
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->memory();
-        $result = $endpoint->deleteMemoryCollection(Collection::Episodic);
+        $result = $endpoint->deleteAllSingleMemoryCollectionPoints(Collection::Episodic);
 
         self::assertEquals($expected['deleted']['episodic'], $result->deleted['episodic']);
     }

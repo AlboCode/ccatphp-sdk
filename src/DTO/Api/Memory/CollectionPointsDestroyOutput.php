@@ -2,7 +2,7 @@
 
 namespace Albocode\CcatphpSdk\DTO\Api\Memory;
 
-class CollectionsDestroyOutput
+class CollectionPointsDestroyOutput
 {
     /** @var array<string, bool> $deleted */
     public array $deleted;
