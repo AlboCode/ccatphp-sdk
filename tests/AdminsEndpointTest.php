@@ -225,6 +225,23 @@ class AdminsEndpointTest extends TestCase
     }
 
     /**
+     * @throws GuzzleException|\JsonException|Exception
+     */
+    public function testAgentCreateSuccess(): void
+    {
+        $expected = [
+            'created' => true,
+        ];
+
+        $cCatClient = $this->getCCatClient($this->apikey, $expected);
+
+        $endpoint = $cCatClient->admins();
+        $result = $endpoint->agentCreate();
+
+        self::assertTrue($result->created);
+    }
+
+    /**
      * @throws GuzzleException|Exception|\JsonException
      */
     public function testGetAvailablePluginsSuccess(): void

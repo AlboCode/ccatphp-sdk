@@ -3,6 +3,7 @@
 namespace Albocode\CcatphpSdk\Endpoints;
 
 use Albocode\CcatphpSdk\DTO\Api\Admins\AdminOutput;
+use Albocode\CcatphpSdk\DTO\Api\Admins\CreatedOutput;
 use Albocode\CcatphpSdk\DTO\Api\Admins\PluginDeleteOutput;
 use Albocode\CcatphpSdk\DTO\Api\Admins\PluginDetailsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Admins\PluginInstallFromRegistryOutput;
@@ -154,7 +155,7 @@ class AdminsEndpoint extends AbstractEndpoint
     public function factoryReset(): ResetOutput
     {
         return $this->postJson(
-            $this->formatUrl('/utils/factory_reset/'),
+            $this->formatUrl('/utils/factory/reset/'),
             ResetOutput::class,
             [],
             $this->systemId,
@@ -169,7 +170,7 @@ class AdminsEndpoint extends AbstractEndpoint
     public function agentReset(?string $agentId = null): ResetOutput
     {
         return $this->postJson(
-            $this->formatUrl('/utils/agent_reset/'),
+            $this->formatUrl('/utils/agent/reset/'),
             ResetOutput::class,
             [],
             $agentId,
@@ -184,8 +185,23 @@ class AdminsEndpoint extends AbstractEndpoint
     public function agentDestroy(?string $agentId = null): ResetOutput
     {
         return $this->postJson(
-            $this->formatUrl('/utils/agent_destroy/'),
+            $this->formatUrl('/utils/agent/destroy/'),
             ResetOutput::class,
+            [],
+            $agentId,
+        );
+    }
+
+    /**
+     * This endpoint is used to create a new agent from scratch.
+     *
+     * @throws GuzzleException
+     */
+    public function agentCreate(?string $agentId = null): CreatedOutput
+    {
+        return $this->postJson(
+            $this->formatUrl('/utils/agent/create/'),
+            CreatedOutput::class,
             [],
             $agentId,
         );
