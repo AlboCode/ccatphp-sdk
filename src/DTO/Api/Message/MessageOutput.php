@@ -11,6 +11,8 @@ class MessageOutput extends MessageBase
 
     public Why $why;
 
+    public ?bool $error = false;
+
     /** @deprecated */
     public readonly string $content;
 
@@ -39,6 +41,7 @@ class MessageOutput extends MessageBase
         $data['type'] = $this->type;
         $data['why'] = $this->why->toArray();
         $data['content'] = $this->text;
+        $data['error'] = $this->error;
 
         return $data;
     }
