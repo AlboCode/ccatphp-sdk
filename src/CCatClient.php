@@ -125,6 +125,18 @@ class CCatClient
     }
 
 
+    public function postMemoryPoint(string $collection, string $content, array $metadata): array
+    {
+        $response = $this->httpClient->getHttpClient()->post("/memory/collections/{$collection}/points", [
+            'json' => [
+                'content' => $content,
+                'metadata' => $metadata
+            ]
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
     public function getAllowedMimeTypes(): AllowedMimeTypesOutput
     {
         $response = $this->httpClient->getHttpClient()->get(sprintf('/rabbithole/allowed-mimetypes'));
