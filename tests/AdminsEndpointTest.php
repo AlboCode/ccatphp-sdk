@@ -179,7 +179,7 @@ class AdminsEndpointTest extends TestCase
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->admins();
-        $result = $endpoint->factoryReset();
+        $result = $endpoint->postFactoryReset();
 
         self::assertTrue($result->deletedSettings);
         self::assertTrue($result->deletedMemories);
@@ -199,7 +199,7 @@ class AdminsEndpointTest extends TestCase
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->admins();
-        $result = $endpoint->agentReset();
+        $result = $endpoint->postAgentReset();
 
         self::assertTrue($result->deletedSettings);
         self::assertTrue($result->deletedMemories);
@@ -218,7 +218,7 @@ class AdminsEndpointTest extends TestCase
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->admins();
-        $result = $endpoint->agentDestroy();
+        $result = $endpoint->postAgentDestroy();
 
         self::assertTrue($result->deletedSettings);
         self::assertTrue($result->deletedMemories);
@@ -236,7 +236,7 @@ class AdminsEndpointTest extends TestCase
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->admins();
-        $result = $endpoint->agentCreate();
+        $result = $endpoint->postAgentCreate();
 
         self::assertTrue($result->created);
     }
@@ -329,7 +329,7 @@ class AdminsEndpointTest extends TestCase
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->admins();
-        $result = $endpoint->installPluginFromZip($expected['filename']);
+        $result = $endpoint->postInstallPluginFromZip($expected['filename']);
 
         self::assertEquals($expected['filename'], $result->filename);
         self::assertEquals($expected['content_type'], $result->contentType);
@@ -349,7 +349,7 @@ class AdminsEndpointTest extends TestCase
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->admins();
-        $result = $endpoint->installPluginFromRegistry($url);
+        $result = $endpoint->postInstallPluginFromRegistry($url);
 
         self::assertEquals($expected['url'], $result->url);
         self::assertEquals($expected['info'], $result->info);

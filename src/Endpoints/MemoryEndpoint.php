@@ -154,10 +154,10 @@ class MemoryEndpoint extends AbstractEndpoint
         ?string $agentId = null,
         ?string $userId = null,
     ): MemoryPointOutput {
-        if ($userId && empty($memoryPoint->metadata["source"])) {
+        if ($userId && empty($memoryPoint->metadata['source'])) {
             $memoryPoint->metadata = !empty($memoryPoint->metadata)
-                ? $memoryPoint->metadata + ["source" => $userId]
-                : ["source" => $userId];
+                ? $memoryPoint->metadata + ['source' => $userId]
+                : ['source' => $userId];
         }
 
         return $this->postJson(
@@ -182,10 +182,10 @@ class MemoryEndpoint extends AbstractEndpoint
         ?string $agentId = null,
         ?string $userId = null,
     ): MemoryPointOutput {
-        if ($userId && empty($memoryPoint->metadata["source"])) {
+        if ($userId && empty($memoryPoint->metadata['source'])) {
             $memoryPoint->metadata = !empty($memoryPoint->metadata)
-                ? $memoryPoint->metadata + ["source" => $userId]
-                : ["source" => $userId];
+                ? $memoryPoint->metadata + ['source' => $userId]
+                : ['source' => $userId];
         }
 
         return $this->put(
@@ -263,7 +263,7 @@ class MemoryEndpoint extends AbstractEndpoint
             MemoryPointsOutput::class,
             $agentId,
             null,
-            $query,
+            $query ?: null,
         );
     }
 

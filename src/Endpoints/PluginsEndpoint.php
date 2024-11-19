@@ -20,17 +20,12 @@ class PluginsEndpoint extends AbstractEndpoint
      */
     public function getAvailablePlugins(?string $pluginName = null, ?string $agentId = null): PluginCollectionOutput
     {
-        $query = null;
-        if ($pluginName) {
-            $query = ['query' => $pluginName];
-        }
-
         return $this->get(
             $this->prefix,
             PluginCollectionOutput::class,
             $agentId,
             null,
-            $query,
+            $pluginName ? ['query' => $pluginName] : []
         );
     }
 
@@ -40,7 +35,7 @@ class PluginsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function togglePlugin(string $pluginId, ?string $agentId = null): PluginToggleOutput
+    public function putTogglePlugin(string $pluginId, ?string $agentId = null): PluginToggleOutput
     {
         return $this->put(
             $this->formatUrl('/toggle/' . $pluginId),

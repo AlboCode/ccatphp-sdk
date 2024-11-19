@@ -46,7 +46,7 @@ abstract class AbstractEndpoint
     }
 
     /**
-     * @param array<string, mixed>|string|null $query
+     * @param array<string, mixed>|null $query
      *
      * @throws GuzzleException
      */
@@ -55,7 +55,7 @@ abstract class AbstractEndpoint
         string $outputClass,
         ?string $agentId = null,
         ?string $userId = null,
-        array|string|null $query = null,
+        ?array $query = null,
     ): mixed {
         $options = [];
         if ($query) {

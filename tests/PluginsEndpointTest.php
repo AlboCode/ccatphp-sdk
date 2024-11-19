@@ -150,7 +150,7 @@ class PluginsEndpointTest extends TestCase
         $cCatClient = $this->getCCatClient($this->apikey, $expected);
 
         $endpoint = $cCatClient->plugins();
-        $result = $endpoint->togglePlugin($pluginId);
+        $result = $endpoint->putTogglePlugin($pluginId);
 
         self::assertEquals($expected['info'], $result->info);
     }

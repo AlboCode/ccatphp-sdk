@@ -152,7 +152,7 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function factoryReset(): ResetOutput
+    public function postFactoryReset(): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/factory/reset/'),
@@ -167,7 +167,7 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function agentCreate(?string $agentId = null): CreatedOutput
+    public function postAgentCreate(?string $agentId = null): CreatedOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/agent/create/'),
@@ -182,7 +182,7 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function agentReset(?string $agentId = null): ResetOutput
+    public function postAgentReset(?string $agentId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/agent/reset/'),
@@ -197,7 +197,7 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function agentDestroy(?string $agentId = null): ResetOutput
+    public function postAgentDestroy(?string $agentId = null): ResetOutput
     {
         return $this->postJson(
             $this->formatUrl('/utils/agent/destroy/'),
@@ -212,14 +212,14 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function getAvailablePlugins(?string $query = null): PluginCollectionOutput
+    public function getAvailablePlugins(?string $pluginName = null): PluginCollectionOutput
     {
         return $this->get(
             $this->formatUrl('/plugins'),
             PluginCollectionOutput::class,
             $this->systemId,
             null,
-            $query,
+            $pluginName ? ['query' => $pluginName] : []
         );
     }
 
@@ -228,7 +228,7 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function installPluginFromZip(string $pathZip): PluginInstallOutput
+    public function postInstallPluginFromZip(string $pathZip): PluginInstallOutput
     {
         return $this->postMultipart(
             $this->formatUrl('/plugins/upload'),
@@ -249,7 +249,7 @@ class AdminsEndpoint extends AbstractEndpoint
      *
      * @throws GuzzleException
      */
-    public function installPluginFromRegistry(string $url): PluginInstallFromRegistryOutput
+    public function postInstallPluginFromRegistry(string $url): PluginInstallFromRegistryOutput
     {
         return $this->postJson(
             $this->formatUrl('/plugins/upload/registry'),
