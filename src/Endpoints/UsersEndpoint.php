@@ -159,7 +159,7 @@ class UsersEndpoint extends AbstractEndpoint
         }
 
         return $this->put(
-            sprintf('/users/%s', $userId),
+            $this->formatUrl($userId),
             UserOutput::class,
             $payload,
             $agentId,
@@ -177,7 +177,7 @@ class UsersEndpoint extends AbstractEndpoint
     public function deleteUser(string $userId, ?string $agentId = null): UserOutput
     {
         return $this->delete(
-            sprintf('/users/%s', $userId),
+            $this->formatUrl($userId),
             UserOutput::class,
             $agentId,
         );

@@ -163,6 +163,21 @@ class AdminsEndpoint extends AbstractEndpoint
     }
 
     /**
+     * This endpoint is used to create a new agent from scratch.
+     *
+     * @throws GuzzleException
+     */
+    public function agentCreate(?string $agentId = null): CreatedOutput
+    {
+        return $this->postJson(
+            $this->formatUrl('/utils/agent/create/'),
+            CreatedOutput::class,
+            [],
+            $agentId,
+        );
+    }
+
+    /**
      * This endpoint is used to reset the agent to factory settings. This will delete all data in the agent.
      *
      * @throws GuzzleException
@@ -193,21 +208,6 @@ class AdminsEndpoint extends AbstractEndpoint
     }
 
     /**
-     * This endpoint is used to create a new agent from scratch.
-     *
-     * @throws GuzzleException
-     */
-    public function agentCreate(?string $agentId = null): CreatedOutput
-    {
-        return $this->postJson(
-            $this->formatUrl('/utils/agent/create/'),
-            CreatedOutput::class,
-            [],
-            $agentId,
-        );
-    }
-
-    /**
      * This endpoint returns the available plugins, at a system level.
      *
      * @throws GuzzleException
@@ -215,7 +215,7 @@ class AdminsEndpoint extends AbstractEndpoint
     public function getAvailablePlugins(?string $query = null): PluginCollectionOutput
     {
         return $this->get(
-            $this->prefix . '/plugins',
+            $this->formatUrl('/plugins'),
             PluginCollectionOutput::class,
             $this->systemId,
             null,
@@ -267,7 +267,7 @@ class AdminsEndpoint extends AbstractEndpoint
     public function getPluginsSettings(): PluginsSettingsOutput
     {
         return $this->get(
-            $this->formatUrl('/settings'),
+            $this->formatUrl('/plugins/settings'),
             PluginsSettingsOutput::class,
             $this->systemId,
         );
@@ -281,7 +281,7 @@ class AdminsEndpoint extends AbstractEndpoint
     public function getPluginSettings(string $pluginId): PluginSettingsOutput
     {
         return $this->get(
-            $this->formatUrl('/settings/' . $pluginId),
+            $this->formatUrl('/plugins/settings/' . $pluginId),
             PluginSettingsOutput::class,
             $this->systemId,
         );
@@ -295,7 +295,7 @@ class AdminsEndpoint extends AbstractEndpoint
     public function getPluginDetails(string $pluginId): PluginDetailsOutput
     {
         return $this->get(
-            $this->formatUrl($pluginId),
+            $this->formatUrl('/plugins/' . $pluginId),
             PluginDetailsOutput::class,
             $this->systemId,
         );
