@@ -119,17 +119,23 @@ class MemoryEndpoint extends AbstractEndpoint
      * points to retrieve.
      * If the userId parameter is provided, the memory points are filtered by the user ID.
      *
+     * @param array<string, mixed>|null $metadata
+     *
      * @throws GuzzleException
      */
     public function getMemoryRecall(
         string $text,
         ?int $k = null,
+        ?array $metadata = null,
         ?string $agentId = null,
         ?string $userId = null,
     ): MemoryRecallOutput {
         $query = ['text' => $text];
         if ($k) {
             $query['k'] = $k;
+        }
+        if ($metadata) {
+            $query['metadata'] = $metadata;
         }
 
         return $this->get(
