@@ -20,29 +20,35 @@ class RabbitHoleEndpoint extends AbstractEndpoint
     public function postFile(
         string $filePath,
         ?string $fileName,
-        ?int $chunkSize,
-        ?int $chunkOverlap,
+        ?int $chunkSize = null,
+        ?int $chunkOverlap = null,
         ?string $agentId = null,
     ): PromiseInterface {
         $fileName = $fileName ?: basename($filePath);
 
-        return $this->getHttpClient($agentId)->postAsync($this->prefix, [
-            'multipart' => [
-                [
-                    'name' => 'file',
-                    'contents' => Utils::tryFopen($filePath, 'r'),
-                    'filename' => $fileName,
-                ],
-                [
-                    'name' => 'chunk_size',
-                    'contents' => $chunkSize ?? null,
-                ],
-                [
-                    'name' => 'chunk_overlap',
-                    'contents' => $chunkOverlap ?? null,
-                ],
-            ],
-        ]);
+        $multipartData = [
+            [
+                'name' => 'file',
+                'contents' => Utils::tryFopen($filePath, 'r'),
+                'filename' => $fileName,
+            ]
+        ];
+
+        if ($chunkSize) {
+            $multipartData[] = [
+                'name' => 'chunk_size',
+                'contents' => $chunkSize,
+            ];
+        }
+
+        if ($chunkOverlap) {
+            $multipartData[] = [
+                'name' => 'chunk_overlap',
+                'contents' => $chunkOverlap,
+            ];
+        }
+
+        return $this->getHttpClient($agentId)->postAsync($this->prefix, ['multipart' => $multipartData]);
     }
 
     /**
@@ -69,14 +75,14 @@ class RabbitHoleEndpoint extends AbstractEndpoint
             ];
         }
 
-        if ($chunkSize !== null) {
+        if ($chunkSize) {
             $multipartData[] = [
                 'name' => 'chunk_size',
                 'contents' => $chunkSize,
             ];
         }
 
-        if ($chunkOverlap !== null) {
+        if ($chunkOverlap) {
             $multipartData[] = [
                 'name' => 'chunk_overlap',
                 'contents' => $chunkOverlap,
