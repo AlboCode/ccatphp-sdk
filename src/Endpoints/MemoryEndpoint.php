@@ -12,7 +12,9 @@ use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointsDeleteByMetadataOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointsOutput;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryRecallOutput;
 use Albocode\CcatphpSdk\DTO\MemoryPoint;
+use Albocode\CcatphpSdk\DTO\Why;
 use Albocode\CcatphpSdk\Enum\Collection;
+use Albocode\CcatphpSdk\Enum\Role;
 use GuzzleHttp\Exception\GuzzleException;
 use RuntimeException;
 
@@ -104,6 +106,48 @@ class MemoryEndpoint extends AbstractEndpoint
         return $this->delete(
             $this->formatUrl('/conversation_history'),
             ConversationHistoryDeleteOutput::class,
+            $agentId,
+            $userId,
+        );
+    }
+
+    /**
+     * This endpoint creates a new element in the conversation history, either for the agent identified by the agentId
+     * parameter (for multi-agent installations) or for the default agent (for single-agent installations). If the
+     * userId parameter is provided, the conversation history is added to the user ID.
+     *
+     * @param array<string, mixed>|null $images
+     * @param array<string, mixed>|null $audio
+     *
+     * @throws GuzzleException
+     */
+    public function postConversationHistory(
+        Role $who,
+        string $text,
+        ?array $images = null,
+        ?array $audio = null,
+        ?Why $why = null,
+        ?string $agentId = null,
+        ?string $userId = null
+    ): ConversationHistoryOutput {
+        $payload = [
+            'who' => $who->value,
+            'text' => $text,
+        ];
+        if ($images) {
+            $payload['images'] = $images;
+        }
+        if ($audio) {
+            $payload['audio'] = $audio;
+        }
+        if ($why) {
+            $payload['why'] = $why->toArray();
+        }
+
+        return $this->postJson(
+            $this->formatUrl('/conversation_history'),
+            ConversationHistoryOutput::class,
+            $payload,
             $agentId,
             $userId,
         );

@@ -2,10 +2,13 @@
 
 namespace Albocode\CcatphpSdk\Tests;
 
+use Albocode\CcatphpSdk\Builders\MemoryBuilder;
 use Albocode\CcatphpSdk\Builders\MemoryPointBuilder;
+use Albocode\CcatphpSdk\Builders\WhyBuilder;
 use Albocode\CcatphpSdk\CcatUtility;
 use Albocode\CcatphpSdk\DTO\Api\Memory\MemoryPointsOutput;
 use Albocode\CcatphpSdk\Enum\Collection;
+use Albocode\CcatphpSdk\Enum\Role;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\MockObject\Exception;
 
@@ -126,6 +129,72 @@ class MemoryEndpointTest extends BaseTest
         $result = $endpoint->deleteConversationHistory();
 
         self::assertEquals($expected['deleted'], $result->deleted);
+    }
+
+    /**
+     * @throws GuzzleException|Exception|\JsonException
+     */
+    public function testPostConversationHistorySuccess(): void
+    {
+        $expected = [
+            'history' => [
+                [
+                    'who' => 'Human',
+                    'when' => 0.0,
+                    'content' => [
+                        'text' => 'Hey you!',
+                        'images' => [],
+                        'audio' => [],
+                    ],
+                ],
+                [
+                    'who' => 'AI',
+                    'when' => 0.1,
+                    'content' => [
+                        'text' => 'Hi!',
+                        'images' => [],
+                        'audio' => [],
+                        'why' => [
+                            'input' => 'input',
+                            'intermediate_steps' => [],
+                            'model_interactions' => [],
+                            'memory' => [
+                                'episodic' => [],
+                                'declarative' => [],
+                                'procedural' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $memory = MemoryBuilder::create()
+            ->setEpisodic($expected['history'][1]['content']['why']['memory']['episodic'])
+            ->setDeclarative($expected['history'][1]['content']['why']['memory']['declarative'])
+            ->setProcedural($expected['history'][1]['content']['why']['memory']['procedural'])
+            ->build();
+
+        $why = WhyBuilder::create()
+            ->setInput($expected['history'][1]['content']['why']['input'])
+            ->setIntermediateSteps($expected['history'][1]['content']['why']['intermediate_steps'])
+            ->setModelInteractions($expected['history'][1]['content']['why']['model_interactions'])
+            ->setAgentOutput([])
+            ->setMemory($memory)
+            ->build();
+
+        $cCatClient = $this->getCCatClient($this->apikey, $expected);
+
+        $endpoint = $cCatClient->memory();
+        $result = $endpoint->postConversationHistory(
+            Role::AI,
+            $expected['history'][1]['content']['text'],
+            $expected['history'][1]['content']['images'],
+            $expected['history'][1]['content']['audio'],
+            $why,
+        );
+
+        self::assertEquals($expected, $result->toArray());
     }
 
     /**
