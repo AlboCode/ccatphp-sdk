@@ -21,7 +21,7 @@ class Memory
         return [
             'episodic' => $this->episodic,
             'declarative' => $this->declarative,
-            'procedural' => $this->declarative,
+            'procedural' => $this->procedural,
         ];
     }
 }
