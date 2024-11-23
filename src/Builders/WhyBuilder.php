@@ -2,6 +2,7 @@
 
 namespace Albocode\CcatphpSdk\Builders;
 
+use Albocode\CcatphpSdk\DTO\AgentOutput;
 use Albocode\CcatphpSdk\DTO\Memory;
 use Albocode\CcatphpSdk\DTO\Why;
 
@@ -18,9 +19,7 @@ class WhyBuilder implements BaseBuilder
 
     private ?array $modelInteractions = [];
 
-    /** @var null|array<string, mixed> */
-
-    private ?array $agentOutput = null;
+    private ?AgentOutput $agentOutput = null;
 
     public static function create() : WhyBuilder
     {
@@ -61,10 +60,7 @@ class WhyBuilder implements BaseBuilder
         return $this;
     }
 
-    /**
-     * @param array<string, mixed> $agentOutput
-     */
-    public function setAgentOutput(?array $agentOutput = null): WhyBuilder
+    public function setAgentOutput(?AgentOutput $agentOutput = null): WhyBuilder
     {
         $this->agentOutput = $agentOutput;
 

@@ -179,7 +179,6 @@ class MemoryEndpointTest extends BaseTest
             ->setInput($expected['history'][1]['content']['why']['input'])
             ->setIntermediateSteps($expected['history'][1]['content']['why']['intermediate_steps'])
             ->setModelInteractions($expected['history'][1]['content']['why']['model_interactions'])
-            ->setAgentOutput([])
             ->setMemory($memory)
             ->build();
 

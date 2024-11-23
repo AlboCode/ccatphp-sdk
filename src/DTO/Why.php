@@ -16,13 +16,10 @@ class Why
 
     /** @var null|array<string, mixed> */
     #[SerializedName('model_interactions')]
-
     public ?array $modelInteractions = [];
 
-    /** @var null|array<string, mixed> */
     #[SerializedName('agent_output')]
-
-    public ?array $agentOutput = null;
+    public ?AgentOutput $agentOutput = null;
 
     /**
      * @return array<string, mixed>
@@ -37,7 +34,7 @@ class Why
         ];
 
         if ($this->agentOutput !== null) {
-            $result['agent_output'] = $this->agentOutput;
+            $result['agent_output'] = $this->agentOutput->toArray();
         }
 
         return $result;
