@@ -51,7 +51,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
 
         $multipartData[] = [
             'name' => 'metadata',
-            'contents' => $metadata
+            'contents' => json_encode($metadata)
         ];
 
         return $this->getHttpClient($agentId)->postAsync($this->prefix, ['multipart' => $multipartData]);
@@ -98,7 +98,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
 
         $multipartData[] = [
             'name' => 'metadata',
-            'contents' => $metadata
+            'contents' => json_encode($metadata)
         ];
         
         return $this->getHttpClient($agentId)->postAsync($this->formatUrl('/batch'), [
@@ -129,7 +129,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
 
         $multipartData[] = [
             'name' => 'metadata',
-            'contents' => $metadata
+            'contents' => json_encode($metadata)
         ];
         
         return $this->getHttpClient($agentId)->postAsync($this->formatUrl('/web'), [
