@@ -23,7 +23,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         ?int $chunkSize = null,
         ?int $chunkOverlap = null,
         ?string $agentId = null,
-        array $metadata = [],
+        ?array $metadata = null,
     ): PromiseInterface {
         $fileName = $fileName ?: basename($filePath);
 
@@ -49,10 +49,12 @@ class RabbitHoleEndpoint extends AbstractEndpoint
             ];
         }
 
-        $multipartData[] = [
-            'name' => 'metadata',
-            'contents' => json_encode($metadata)
-        ];
+        if ($metadata) {
+            $multipartData[] = [
+                'name' => 'metadata',
+                'contents' => json_encode($metadata)
+            ];
+        }
 
         return $this->getHttpClient($agentId)->postAsync($this->prefix, ['multipart' => $multipartData]);
     }
@@ -70,7 +72,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         ?int $chunkSize = null,
         ?int $chunkOverlap = null,
         ?string $agentId = null,
-        array $metadata = [],
+        ?array $metadata = null,
     ): PromiseInterface {
         $multipartData = [];
 
@@ -96,10 +98,12 @@ class RabbitHoleEndpoint extends AbstractEndpoint
             ];
         }
 
-        $multipartData[] = [
-            'name' => 'metadata',
-            'contents' => json_encode($metadata)
-        ];
+        if ($metadata) {
+            $multipartData[] = [
+                'name' => 'metadata',
+                'contents' => json_encode($metadata)
+            ];
+        }
         
         return $this->getHttpClient($agentId)->postAsync($this->formatUrl('/batch'), [
             'multipart' => $multipartData,
@@ -117,7 +121,7 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         ?int $chunkSize = null,
         ?int $chunkOverlap = null,
         ?string $agentId = null,
-        array $metadata = [],
+        ?array $metadata = null,
     ): PromiseInterface {
         $payload = ['url' => $webUrl];
         if ($chunkSize) {
@@ -126,11 +130,9 @@ class RabbitHoleEndpoint extends AbstractEndpoint
         if ($chunkOverlap) {
             $payload['chunk_overlap'] = $chunkOverlap;
         }
-
-        $multipartData[] = [
-            'name' => 'metadata',
-            'contents' => json_encode($metadata)
-        ];
+        if ($metadata) {
+            $payload['metadata'] = $metadata;
+        }
         
         return $this->getHttpClient($agentId)->postAsync($this->formatUrl('/web'), [
             'json' => $payload,
